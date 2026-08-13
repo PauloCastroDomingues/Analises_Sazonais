@@ -23,7 +23,10 @@ Extensoes executivas atuais:
 
 ## Estado atual
 
-O projeto esta em modo local, sem publicacao externa. O usuario quer validar pelo localhost.
+O projeto esta publicado em GitHub e Vercel, mantendo validacao local por localhost.
+
+- GitHub: `https://github.com/PauloCastroDomingues/Analises_Sazonais`
+- Vercel producao: `https://analises-sazonais.vercel.app`
 
 Tela atual:
 
@@ -32,9 +35,24 @@ Tela atual:
 - Primeira tela com 6 cards alinhados em grade `3 x 2`.
 - Cada card da analise principal tem a mesma estrutura e 6 linhas uteis para evitar espacos vazios.
 - Abas de detalhamento continuam abaixo da analise principal.
-- Cache busting atual em `index.html`: `assets/styles.css?v=20260813-presentation-v2` e `assets/app.js?v=20260813-presentation-v2`.
+- Cache busting atual em `index.html`: `assets/styles.css?v=20260813-vercel-mobile-v1` e `assets/app.js?v=20260813-vercel-mobile-v1`.
 - Abaixo dos 6 cards principais existe uma seção executiva de `Cesta 2+ e recompra`.
 - Abaixo de `Cesta 2+ e recompra` existe uma secao executiva de `Heat map por semana, dia e horario`.
+
+## Atualizacao de 2026-08-13 - Publicacao GitHub e Vercel
+
+Motivo da revisao: o usuario pediu para subir o projeto no GitHub e configurar/publicar no Vercel.
+
+O que foi ajustado:
+
+- Repositorio local inicializado a partir do `origin/main` existente.
+- Dashboard publicado no GitHub em `PauloCastroDomingues/Analises_Sazonais`.
+- Projeto Vercel criado como `analises-sazonais` no scope `reise-team`.
+- GitHub conectado ao projeto Vercel para proximos deploys automaticos.
+- Deploy de producao validado em `https://analises-sazonais.vercel.app`.
+- `reise-ssot-bq`, screenshots locais e arquivos `.env*` ficam ignorados e fora do deploy.
+- Ajuste mobile no resumo executivo para evitar overflow horizontal no deploy publico.
+- Cache dos assets atualizado para `20260813-vercel-mobile-v1`.
 
 ## Atualizacao de 2026-08-13 - Apresentacao visual v2
 
@@ -404,8 +422,8 @@ Validacoes visuais anteriores, mantidas apenas como historico:
 - Nao quer cards com espacos em branco desalinhados.
 - Tudo precisa estar alinhado: cards, linhas, alturas e hierarquia visual.
 - Quer os 5 temas pedidos juntos na primeira tela, nao escondidos apenas em abas.
-- Quer validar via localhost.
-- Nao pediu publicacao/deploy.
+- Quer validar via localhost quando o trabalho ainda estiver em construcao.
+- Publicacao GitHub/Vercel autorizada e executada em `2026-08-13`.
 
 ## Cuidados para o proximo agente
 

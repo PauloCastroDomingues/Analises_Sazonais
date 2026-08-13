@@ -1836,7 +1836,19 @@ th {
   }
 
   .executive-brief {
-    padding: 18px 0 20px;
+    padding: 18px 14px 20px;
+    overflow: hidden;
+  }
+
+  .brief-copy,
+  .brief-grid,
+  .brief-card {
+    min-width: 0;
+  }
+
+  .brief-copy h2,
+  .brief-copy p:last-child {
+    max-width: 100%;
   }
 
   .heatmap-board {
