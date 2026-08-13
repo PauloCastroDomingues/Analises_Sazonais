@@ -1,0 +1,12 @@
+.vercel/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local visual verification artifacts
+layout-check-*.png
+*.log
+
+# Local source/reference checkout, not used by the static dashboard
+reise-ssot-bq/

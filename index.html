@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard Black 2025 - Reise</title>
+    <link rel="stylesheet" href="assets/styles.css?v=20260813-presentation-v2">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="title-block">
+        <div class="title-row">
+          <h1>Visão Geral</h1>
+          <span class="date-badge">Black 2025</span>
+        </div>
+        <p class="subtitle">Forecast de compras | Novembro 2025</p>
+      </div>
+      <div class="source-actions">
+        <span id="sourceStatus" class="status-pill">Carregando base</span>
+        <a id="sourceLink" class="action-link" href="#" target="_blank" rel="noreferrer">Planilha fonte</a>
+        <button id="downloadSummary" class="action-button" type="button" disabled>Exportar JSON</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="loadError" class="load-error" hidden>
+        <strong>Não foi possível carregar os dados locais.</strong>
+        <span>Abra pelo localhost para o navegador permitir a leitura de <code>data/black_nov_2025_dashboard.json</code>.</span>
+      </section>
+
+      <section class="executive-brief" aria-label="Resumo executivo para apresentacao">
+        <div class="brief-copy">
+          <p class="eyebrow">Resumo executivo</p>
+          <h2>Forecast de compras Black 2025</h2>
+          <p id="briefThesis">-</p>
+        </div>
+        <div class="brief-grid">
+          <article class="brief-card is-primary">
+            <span>Semana critica</span>
+            <strong id="briefWeekSignal">-</strong>
+            <small id="briefWeekDetail">-</small>
+          </article>
+          <article class="brief-card">
+            <span>Dia da Black</span>
+            <strong id="briefBlackDaySignal">-</strong>
+            <small id="briefBlackDayDetail">-</small>
+          </article>
+          <article class="brief-card">
+            <span>Linha lider</span>
+            <strong id="briefLineSignal">-</strong>
+            <small id="briefLineDetail">-</small>
+          </article>
+          <article class="brief-card">
+            <span>Faixa de preco</span>
+            <strong id="briefBandSignal">-</strong>
+            <small id="briefBandDetail">-</small>
+          </article>
+        </div>
+      </section>
+
+      <section class="kpi-grid" aria-label="Resumo geral">
+        <article class="kpi-card">
+          <span>Receita analisada</span>
+          <strong id="kpiRevenue">-</strong>
+          <small id="kpiAvgPrice">-</small>
+        </article>
+        <article class="kpi-card">
+          <span>Unidades analisadas</span>
+          <strong id="kpiPaidUnits">-</strong>
+          <small id="kpiOrders">-</small>
+        </article>
+        <article class="kpi-card">
+          <span>Brindes oficiais</span>
+          <strong id="kpiGiftUnits">-</strong>
+          <small id="kpiGiftValue">-</small>
+        </article>
+        <article class="kpi-card">
+          <span>Linhas de item</span>
+          <strong id="kpiRows">-</strong>
+          <small id="kpiPeriod">-</small>
+        </article>
+      </section>
+
+      <section class="analysis-board" aria-label="Análise completa solicitada">
+        <div class="analysis-head">
+          <div>
+            <p class="eyebrow">Análise principal</p>
+            <h2>Black 2025 para compras</h2>
+          </div>
+          <p>Escopo principal: tênis, mochilas e brindes oficiais. Demais linhas ficam fora da análise.</p>
+        </div>
+
+        <div class="analysis-grid">
+          <article class="analysis-card">
+            <div class="analysis-card-head">
+              <span>01</span>
+              <div>
+                <h3>Ranking linhas mais vendidas</h3>
+                <p>RS6, RS7, RS Knit, 911 e demais.</p>
+              </div>
+              <strong id="mainLineSignal">-</strong>
+            </div>
+            <div id="mainLineRanking" class="compact-list"></div>
+          </article>
+
+          <article class="analysis-card">
+            <div class="analysis-card-head">
+              <span>02</span>
+              <div>
+                <h3>Faixa de valor que mais vendeu</h3>
+                <p>400-500, 500-600, 600-700 e demais.</p>
+              </div>
+              <strong id="mainBandSignal">-</strong>
+            </div>
+            <div id="mainBandRanking" class="compact-list"></div>
+          </article>
+
+          <article class="analysis-card">
+            <div class="analysis-card-head">
+              <span>03</span>
+              <div>
+                <h3>Representatividade de mochilas</h3>
+                <p>Mochilas são o único acessório analisado.</p>
+              </div>
+              <strong id="mainAccessorySignal">-</strong>
+            </div>
+            <div id="mainAccessoryRanking" class="compact-list"></div>
+          </article>
+
+          <article class="analysis-card">
+            <div class="analysis-card-head">
+              <span>03.1</span>
+              <div>
+                <h3>Mochilas: ranking</h3>
+                <p>Modelos mais vendidos.</p>
+              </div>
+              <strong id="mainBackpackSignal">-</strong>
+            </div>
+            <div id="mainBackpackRanking" class="compact-list"></div>
+          </article>
+
+          <article class="analysis-card">
+            <div class="analysis-card-head">
+              <span>04</span>
+              <div>
+                <h3>Percentual por valor de produto</h3>
+                <p>Unidades e receita por faixa.</p>
+              </div>
+              <strong id="mainValueShareSignal">-</strong>
+            </div>
+            <div id="mainValueShare" class="compact-list"></div>
+          </article>
+
+          <article class="analysis-card">
+            <div class="analysis-card-head">
+              <span>05</span>
+              <div>
+                <h3>Brindes que mais saíram</h3>
+                <p>Volume, percentual e valor tabela.</p>
+              </div>
+              <strong id="mainGiftSignal">-</strong>
+            </div>
+            <div id="mainGiftRanking" class="compact-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="one-glance" aria-label="Cesta 2+ e recompra">
+        <div class="one-glance-head">
+          <div>
+            <p class="eyebrow">Comportamento de cesta</p>
+            <h2>Cesta 2+ e recompra</h2>
+          </div>
+          <p>Pedidos com 2+ itens pagos e clientes com 2+ pedidos no mês.</p>
+        </div>
+
+        <div class="definition-strip" aria-label="Definições da análise de cesta e recompra">
+          <span><strong>Cesta 2+</strong> mesmo pedido com 2 ou mais itens pagos.</span>
+          <span><strong>Recompra</strong> mesmo cliente com 2 ou mais pedidos pagos em novembro.</span>
+          <span id="repurchaseBaseNote"><strong>Base</strong> -</span>
+        </div>
+
+        <div class="decision-grid">
+          <article class="decision-card accent-amber">
+            <span>Cesta 2+ (mesmo pedido)</span>
+            <strong id="multiOrderShare">-</strong>
+            <p id="multiOrderDetail">-</p>
+          </article>
+          <article class="decision-card accent-blue">
+            <span>Receita da cesta 2+</span>
+            <strong id="multiRevenueShare">-</strong>
+            <p id="multiRevenueDetail">-</p>
+          </article>
+          <article class="decision-card accent-teal">
+            <span>Recompra (mesmo cliente)</span>
+            <strong id="repeatCustomers">-</strong>
+            <p id="repeatCustomersDetail">-</p>
+          </article>
+          <article class="decision-card accent-rose">
+            <span>Pedidos de clientes recorrentes</span>
+            <strong id="repeatOrderShare">-</strong>
+            <p id="repeatOrderDetail">-</p>
+          </article>
+        </div>
+
+        <div class="overview-grid repurchase-grid">
+          <article class="overview-panel emphasis-panel">
+            <div class="panel-title">
+              <span>Produtos dentro da cesta 2+</span>
+              <strong id="topMultiProductSignal">-</strong>
+            </div>
+            <div id="multiProductProductsMini" class="mini-list"></div>
+          </article>
+          <article class="overview-panel">
+            <div class="panel-title">
+              <span>Linhas dentro da cesta 2+</span>
+              <strong id="topMultiLineSignal">-</strong>
+            </div>
+            <div id="multiProductLinesMini" class="mini-list"></div>
+          </article>
+          <article class="overview-panel">
+            <div class="panel-title">
+              <span>Produtos comprados por recompradores</span>
+              <strong id="topRepeatProductSignal">-</strong>
+            </div>
+            <div id="repeatProductsMini" class="mini-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="heatmapBoard" class="heatmap-board" aria-label="Heat map de vendas por semana, dia e horario">
+        <div class="heatmap-head">
+          <div>
+            <p class="eyebrow">Ritmo de vendas</p>
+            <h2>Heat map por semana, dia e horario</h2>
+          </div>
+          <div class="heatmap-control">
+            <label for="heatmapWeekSelect">Semana</label>
+            <select id="heatmapWeekSelect" class="row-limit" aria-label="Selecionar semana do heat map">
+              <option value="1">Semana 1</option>
+              <option value="2">Semana 2</option>
+              <option value="3">Semana 3</option>
+              <option value="4" selected>Semana 4 - Black</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="heatmapSummary" class="heatmap-summary"></div>
+
+        <div class="heatmap-legend" aria-label="Legenda de intensidade do heat map">
+          <span>Menor volume</span>
+          <div class="legend-scale"><i></i><i></i><i></i><i></i><i></i></div>
+          <span>Maior volume</span>
+        </div>
+
+        <div id="salesHeatmap" class="heatmap-weeks"></div>
+      </section>
+
+      <div class="detail-label">Detalhamento por tópico</div>
+
+      <nav class="tabs" aria-label="Tópicos do estudo">
+        <button class="tab active" type="button" data-tab="linhas">1. Linhas</button>
+        <button class="tab" type="button" data-tab="faixas">2. Faixas</button>
+        <button class="tab" type="button" data-tab="acessorios">3. Mochilas</button>
+        <button class="tab" type="button" data-tab="valor">4. Valor</button>
+        <button class="tab" type="button" data-tab="brindes">5. Brindes</button>
+        <button class="tab" type="button" data-tab="recompra">6. Cesta/Recompra</button>
+        <button class="tab" type="button" data-tab="heatmap">7. Heat map</button>
+        <button class="tab" type="button" data-tab="auditoria">Auditoria</button>
+      </nav>
+
+      <section class="tab-panel active" data-panel="linhas">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Tópico 1</p>
+            <h2>Ranking de linhas mais vendidas</h2>
+          </div>
+          <select id="lineLimit" class="row-limit" aria-label="Quantidade de linhas no ranking">
+            <option value="10">Top 10</option>
+            <option value="20" selected>Todas</option>
+          </select>
+        </div>
+        <div id="lineRanking" class="table-wrap"></div>
+      </section>
+
+      <section class="tab-panel" data-panel="faixas">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Tópico 2</p>
+            <h2>Faixa de valor que mais vendeu</h2>
+          </div>
+        </div>
+        <div id="bandCards" class="band-grid"></div>
+        <div id="valueBands" class="table-wrap"></div>
+      </section>
+
+      <section class="tab-panel" data-panel="acessorios">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Tópico 3</p>
+            <h2>Representatividade e volume de mochilas</h2>
+          </div>
+        </div>
+        <div id="accessoryCards" class="band-grid"></div>
+        <div class="split-grid">
+          <div>
+            <h3>Resumo por categoria</h3>
+            <div id="accessorySummary" class="table-wrap"></div>
+          </div>
+          <div>
+            <div class="mini-head">
+              <h3>Ranking de mochilas</h3>
+              <select id="backpackLimit" class="row-limit" aria-label="Quantidade de mochilas no ranking">
+                <option value="10" selected>Top 10</option>
+                <option value="21">Todas</option>
+              </select>
+            </div>
+            <div id="backpackRanking" class="table-wrap"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-panel" data-panel="valor">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Tópico 4</p>
+            <h2>Percentual de vendas por valor de produto</h2>
+          </div>
+        </div>
+        <div id="priceDistribution" class="table-wrap"></div>
+      </section>
+
+      <section class="tab-panel" data-panel="brindes">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Tópico 5</p>
+            <h2>Brindes oficiais: volume e percentual</h2>
+          </div>
+          <select id="giftLimit" class="row-limit" aria-label="Quantidade de brindes no ranking">
+            <option value="6" selected>Todos os 6</option>
+          </select>
+        </div>
+        <div id="giftRanking" class="table-wrap"></div>
+      </section>
+
+      <section class="tab-panel" data-panel="recompra">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Tópico 6</p>
+            <h2>Cesta 2+ e recompra</h2>
+          </div>
+        </div>
+        <div class="split-grid">
+          <div>
+            <h3>Produtos em pedidos com cesta 2+</h3>
+            <div id="multiProductProducts" class="table-wrap"></div>
+          </div>
+          <div>
+            <h3>Produtos de clientes que recompraram</h3>
+            <div id="repeatCustomerProducts" class="table-wrap"></div>
+          </div>
+        </div>
+        <div class="detail-label">Linhas em pedidos com cesta 2+</div>
+        <div id="multiProductLines" class="table-wrap"></div>
+      </section>
+
+      <section class="tab-panel" data-panel="heatmap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Topico 7</p>
+            <h2>Heat map de vendas por semana, dia e horario</h2>
+          </div>
+        </div>
+        <div id="heatmapTable" class="table-wrap"></div>
+      </section>
+
+      <section class="tab-panel" data-panel="auditoria">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Auditoria</p>
+            <h2>Fonte, período e regra de classificação</h2>
+          </div>
+        </div>
+        <div id="auditGrid" class="audit-grid"></div>
+      </section>
+    </main>
+
+    <script src="assets/app.js?v=20260813-presentation-v2"></script>
+  </body>
+</html>

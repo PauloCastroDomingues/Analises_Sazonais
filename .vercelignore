@@ -1,0 +1,6 @@
+.git/
+.vercel/
+node_modules/
+
+layout-check-*.png
+reise-ssot-bq/

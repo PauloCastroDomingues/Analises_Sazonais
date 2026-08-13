@@ -1,0 +1,1 @@
+order_date,source,order_id,sku,item_name,quantity,unit_price,line_gross_amount,line_discount_amount,line_net_amount,product_line,item_type,value_band,is_gift
