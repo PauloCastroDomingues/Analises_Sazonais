@@ -36,7 +36,7 @@ Tela atual:
 - Primeira tela com 6 cards alinhados em grade `3 x 2`.
 - Cada card da analise principal tem a mesma estrutura e 6 linhas uteis para evitar espacos vazios.
 - Abas de detalhamento continuam abaixo da analise principal.
-- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-coorte-pos-v1` e `assets/app.js?v=20260814-coorte-pos-v1`.
+- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-coorte-prepos-v1` e `assets/app.js?v=20260814-coorte-prepos-v1`.
 - Abaixo dos 6 cards principais existe uma secao executiva de `Comportamento de compra`.
 - Abaixo de `Comportamento de compra` existe uma secao executiva de `Heat map por semana, dia e horario`.
 
@@ -55,10 +55,15 @@ O que foi ajustado:
   - 3 meses depois: `801` de `8.911` clientes com 2+ pedidos, taxa `9,0%`.
 - Coorte pos-Black calculada na aba `coorte_pos_black_calc`: `731` de `10.383` clientes de novembro voltaram entre dez/2025 e fev/2026, taxa `7,0%`.
 - Esses clientes fizeram `862` pedidos, compraram `1.801` unidades e geraram `R$ 691.580` no pos-Black.
+- Coorte pre-Black calculada na aba `coorte_pre_black_calc`: `927` de `10.383` clientes de novembro ja tinham compra paga entre ago/2025 e out/2025, taxa `8,9%`.
+- Esses clientes fizeram `1.162` pedidos, compraram `2.175` unidades e geraram `R$ 983.908` nos 3 meses anteriores.
+- Ultima compra antes da Black: Ago/25 `225` clientes, Set/25 `202` clientes e Out/25 `500` clientes.
 - Clientes que fizeram `2+` pedidos na Black retornaram `14,3%` (`106/743`), contra `6,5%` (`625/9.640`) entre clientes de 1 pedido.
+- Clientes que fizeram `2+` pedidos na Black tinham compra previa recente em `17,0%` dos casos (`126/743`), contra `8,3%` (`801/9.640`) entre clientes de 1 pedido.
 - Primeiro retorno: Dez/25 `392` clientes, Jan/26 `204` clientes e Fev/26 `135` clientes.
-- Observacao metodologica: a coorte pos-Black mede todos os clientes pagos de novembro que voltaram nos 3 meses seguintes. Para isolar apenas os `86%` de clientes historicamente novos, precisa de um marcador de cliente novo versus antigo na base Black.
-- Cache dos assets atualizado para `20260814-coorte-pos-v1`.
+- Conferencia sem discrepancia nos pontos criticos: `clientes_black` = `10.383`, `clientes_black_2mais_pedidos` = `743`, coorte pre = `927` e coorte pos = `731`, todos batendo entre abas auxiliares e JSON.
+- Observacao metodologica: as coortes pre e pos-Black medem janelas de 3 meses em torno de novembro. Para isolar cliente novo historico completo, precisa de uma base de primeira compra historica, nao apenas ago-out/2025.
+- Cache dos assets atualizado para `20260814-coorte-prepos-v1`.
 
 ## Atualizacao de 2026-08-14 - Tooltips, faixas em reais e dropdown de cores
 
@@ -222,6 +227,7 @@ Fonte usada nesta versao: planilha `BASE_BLACK_2025` enviada pelo usuario.
 - Aba auxiliar do escopo principal: `scope_calc`
 - Aba auxiliar de recompra/cesta: `recompra_calc`
 - Aba auxiliar de heat map: `heatmap_calc`
+- Aba auxiliar de coorte pre-Black: `coorte_pre_black_calc`
 - Aba de valores exportados para o heat map: `heatmap_day_hour_values`
 - Snapshot local usado pelo dashboard: `data/black_nov_2025_dashboard.json`
 - CSV local de apoio do heat map: `data/heatmap_day_hour_values.csv`

@@ -980,6 +980,28 @@ code {
     rgba(255, 255, 255, 0.026);
 }
 
+.cohort-stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.cohort-panel {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 18px;
+  background: rgba(14, 15, 13, 0.28);
+}
+
+.cohort-panel.is-pre {
+  border-color: rgba(238, 196, 78, 0.2);
+}
+
+.cohort-panel.is-post {
+  border-color: rgba(42, 188, 177, 0.24);
+}
+
 .post-cohort-head {
   display: flex;
   align-items: flex-end;
@@ -1047,7 +1069,7 @@ code {
 
 .post-cohort-columns {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 
@@ -2344,6 +2366,7 @@ th {
     text-align: left;
   }
 
+  .cohort-stack,
   .post-cohort-kpis,
   .post-cohort-columns {
     grid-template-columns: 1fr;

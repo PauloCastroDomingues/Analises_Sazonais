@@ -15154,10 +15154,115 @@
   "recurrenceExpanded": {
     "basis": "Comparacao agregada por customer_sk e pedidos unicos. Antes/depois vem das planilhas fornecidas em 2026-08-14; Black usa recompra_calc/local snapshot.",
     "cohortStatus": "coorte_exata_calculada",
-    "cohortLimitation": "A coorte pos-Black mede todos os clientes de novembro que voltaram em dez/2025, jan/2026 ou fev/2026. Para isolar apenas os 86% de clientes historicamente novos, precisa de um marcador de cliente novo versus antigo na base Black.",
+    "cohortLimitation": "As coortes pre e pos-Black medem janelas de 3 meses em torno de novembro, cruzando customer_sk. A leitura de 'novo historico' continua limitada a essa janela se nao houver uma base de primeira compra historica completa.",
     "sourceSheets": {
       "before": "https://docs.google.com/spreadsheets/d/131VtNxUdUT5xNDGFz9NJob4KuUu939vXIrRdY45jo1I/edit?gid=288247892#gid=288247892",
       "after": "https://docs.google.com/spreadsheets/d/1gIUCPbFc5h3Uu0vYttQv5Xr39sxOatQQkn4gG6PjKBA/edit?gid=890569835#gid=890569835"
+    },
+    "dataQualityAudit": [
+      {
+        "check": "clientes_black",
+        "sheet": "coorte_pre_black_calc / coorte_pos_black_calc",
+        "sheetValue": 10383,
+        "jsonValue": 10383,
+        "status": "ok"
+      },
+      {
+        "check": "clientes_black_2mais_pedidos",
+        "sheet": "recompra_calc / coortes",
+        "sheetValue": 743,
+        "jsonValue": 743,
+        "status": "ok"
+      },
+      {
+        "check": "clientes_black_com_compra_pre_3m",
+        "sheet": "coorte_pre_black_calc",
+        "sheetValue": 927,
+        "jsonValue": 927,
+        "status": "ok"
+      },
+      {
+        "check": "clientes_black_com_compra_pos_3m",
+        "sheet": "coorte_pos_black_calc",
+        "sheetValue": 731,
+        "jsonValue": 731,
+        "status": "ok"
+      }
+    ],
+    "preBlackCohort": {
+      "sourceSheet": "coorte_pre_black_calc",
+      "basis": "Clientes pagos de novembro cruzados por customer_sk com pedidos pagos de 2025-08-01 a 2025-10-31. Receita pre-Black soma line_net_amount de linhas pagas; pedidos pre-Black contam order_key unico.",
+      "totals": {
+        "blackCustomers": 10383,
+        "priorCustomers": 927,
+        "priorRate": 0.08928055475296157,
+        "preOrders": 1162,
+        "preUnits": 2175,
+        "preRevenue": 983908,
+        "avgPreOrdersPerPriorCustomer": 1.2535059331175835,
+        "avgPreRevenuePerPriorCustomer": 1061.3894282632148,
+        "blackSingleOrderCustomers": 9640,
+        "blackSingleOrderPriorCustomers": 801,
+        "blackSingleOrderPriorRate": 0.08309128630705394,
+        "blackMultiOrderCustomers": 743,
+        "blackMultiOrderPriorCustomers": 126,
+        "blackMultiOrderPriorRate": 0.1695827725437416,
+        "multiVsSinglePriorRate": 2.0409212575801114
+      },
+      "lastPreMonths": [
+        {
+          "month": "2025-08",
+          "label": "Ago/25",
+          "customers": 225,
+          "pctPrior": 0.24271844660194175,
+          "pctBlackCustomers": 0.02167003756139844
+        },
+        {
+          "month": "2025-09",
+          "label": "Set/25",
+          "customers": 202,
+          "pctPrior": 0.21790722761596548,
+          "pctBlackCustomers": 0.019454878166233265
+        },
+        {
+          "month": "2025-10",
+          "label": "Out/25",
+          "customers": 500,
+          "pctPrior": 0.5393743257820928,
+          "pctBlackCustomers": 0.04815563902532986
+        }
+      ],
+      "purchaseMonths": [
+        {
+          "month": "2025-08",
+          "label": "Ago/25",
+          "customers": 278,
+          "orders": 316,
+          "revenue": 264893,
+          "pctPreRevenue": 0.2692253747301577
+        },
+        {
+          "month": "2025-09",
+          "label": "Set/25",
+          "customers": 244,
+          "orders": 269,
+          "revenue": 219150,
+          "pctPreRevenue": 0.22273423938010464
+        },
+        {
+          "month": "2025-10",
+          "label": "Out/25",
+          "customers": 500,
+          "orders": 577,
+          "revenue": 499865,
+          "pctPreRevenue": 0.5080403858897377
+        }
+      ],
+      "insights": [
+        "927 dos 10.383 clientes da Black ja tinham comprado nos 3 meses anteriores, taxa de 8,9%.",
+        "A ausencia de compra nos 3 meses anteriores foi 91,1%; isso se aproxima da leitura de aquisicao, mas nao substitui uma base historica completa.",
+        "Outubro concentrou 500 ultimas compras antes da Black, 53,9% dos clientes com compra previa recente."
+      ]
     },
     "postBlackCohort": {
       "sourceSheet": "coorte_pos_black_calc",
@@ -15296,7 +15401,7 @@
     ],
     "insights": [
       "A Black concentrou aquisicao e compra unica: clientes com 2+ pedidos cairam para 7,2%, abaixo dos 9,6% pre e 9,0% pos.",
-      "Na coorte exata, 731 clientes de novembro voltaram nos 3 meses seguintes, 7,0% dos clientes Black.",
+      "Na coorte exata, 927 clientes de novembro ja tinham comprado nos 3 meses anteriores e 731 voltaram nos 3 meses seguintes.",
       "Carrinho medio geral da Black foi 1,56 item por pedido; os 2,74 itens por pedido sao apenas pedidos com 2+ itens."
     ]
   }
