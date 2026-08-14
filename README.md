@@ -36,9 +36,23 @@ Tela atual:
 - Primeira tela com 6 cards alinhados em grade `3 x 2`.
 - Cada card da analise principal tem a mesma estrutura e 6 linhas uteis para evitar espacos vazios.
 - Abas de detalhamento continuam abaixo da analise principal.
-- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-coorte-prepos-v1` e `assets/app.js?v=20260814-coorte-prepos-v1`.
+- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-recorrencia-explicativa-v1` e `assets/app.js?v=20260814-recorrencia-explicativa-v1`.
 - Abaixo dos 6 cards principais existe uma secao executiva de `Comportamento de compra`.
 - Abaixo de `Comportamento de compra` existe uma secao executiva de `Heat map por semana, dia e horario`.
+
+## Atualizacao de 2026-08-14 - Recorrencia explicativa por coorte Black
+
+Motivo da revisao: o usuario sinalizou que a secao `Recorrencia expandida` ainda nao explicava claramente a base dos 3 meses antes e depois.
+
+O que foi ajustado:
+
+- Titulo da secao mudou para `Coorte Black: antes, durante e depois`.
+- O resumo agora explicita a base fixa: `10.383` clientes que compraram na Black.
+- O card `3 meses antes` passou a abrir com a coorte Black: `927` de `10.383` clientes ja compravam antes, taxa `8,9%`.
+- O card `3 meses depois` passou a abrir com a coorte Black: `731` de `10.383` clientes recompraram depois, taxa `7,0%`.
+- As taxas agregadas dos periodos (`9,6%` antes e `9,0%` depois) ficaram como contexto, nao mais como leitura principal.
+- O bloco detalhado ganhou frases explicando que antes olha para ago-out/2025 e depois olha para dez/2025-fev/2026, sempre cruzando por `customer_sk`.
+- Cache dos assets atualizado para `20260814-recorrencia-explicativa-v1`.
 
 ## Atualizacao de 2026-08-14 - Recorrencia expandida e media geral de carrinho
 

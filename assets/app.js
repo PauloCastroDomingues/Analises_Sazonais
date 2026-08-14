@@ -19,6 +19,11 @@ const percentFmt = new Intl.NumberFormat("pt-BR", {
   style: "percent",
   maximumFractionDigits: 1,
 });
+const percentFixedFmt = new Intl.NumberFormat("pt-BR", {
+  style: "percent",
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
 const currencyFmt = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
@@ -502,65 +507,124 @@ function renderExpandedRecurrence() {
   if (!recurrence || !container) return;
 
   const periods = recurrence.periods || [];
+  const periodByKey = new Map(periods.map((row) => [row.key, row]));
+  const before = periodByKey.get("before_3m") || periods[0];
+  const black = periodByKey.get("black") || periods[1];
+  const after = periodByKey.get("after_3m") || periods[2];
   const preCohort = recurrence.preBlackCohort;
   const postCohort = recurrence.postBlackCohort;
-  const maxRepeatRate = Math.max(...periods.map((row) => Number(row.repeatCustomerRate) || 0), 0.01);
-  const black = periods.find((row) => row.key === "black");
-  const after = periods.find((row) => row.key === "after_3m");
-  const deltaAfterBlack = after && black ? after.repeatCustomerRate - black.repeatCustomerRate : 0;
-  const direction = deltaAfterBlack >= 0 ? "acima" : "abaixo";
+  const preTotals = preCohort?.totals;
+  const postTotals = postCohort?.totals;
+  const blackCustomers = preTotals?.blackCustomers || postTotals?.blackCustomers || black?.customers || 0;
   const audit = recurrence.dataQualityAudit || [];
   const auditHasDiscrepancy = audit.some((row) => row.status !== "ok");
+  const auditText = audit.length
+    ? auditHasDiscrepancy
+      ? "há pontos para revisar."
+      : "sem divergência nos checks críticos de clientes Black, clientes 2+ pedidos, coorte pré e coorte pós."
+    : "não informada.";
 
   setText(
     "recurrenceExpandedInsight",
-    preCohort?.totals && postCohort?.totals
-      ? `${numberFmt.format(preCohort.totals.priorCustomers)} clientes Black ja tinham compra recente antes (${percentFmt.format(preCohort.totals.priorRate)}); ${numberFmt.format(postCohort.totals.returningCustomers)} voltaram depois (${percentFmt.format(postCohort.totals.returnRate)}).`
-      : after && black
-      ? `Depois da Black, a recorrência agregada ficou ${decimalFmt.format(Math.abs(deltaAfterBlack) * 100)} p.p. ${direction} de novembro; isso ainda não prova retorno da coorte nova.`
+    preTotals && postTotals
+      ? `Base fixa: ${numberFmt.format(blackCustomers)} clientes que compraram na Black. Desses, ${numberFmt.format(preTotals.priorCustomers)} já compravam antes (${percentFixedFmt.format(preTotals.priorRate)}) e ${numberFmt.format(postTotals.returningCustomers)} recompraram depois (${percentFixedFmt.format(postTotals.returnRate)}).`
       : recurrence.insights?.[0] || "Comparação agregada entre antes, Black e depois."
   );
   setText(
     "recurrenceExpandedNote",
-    `${recurrence.cohortLimitation ||
-      "Leitura agregada: para medir cashback, precisa cruzar os clientes novos da Black contra os pedidos de dezembro, janeiro e fevereiro em uma base unificada."} Conferencia: ${
-      audit.length ? (auditHasDiscrepancy ? "ha pontos para revisar." : "sem divergencia nos checks criticos de clientes Black, clientes 2+ pedidos, coorte pre e coorte pos.") : "nao informada."
-    }`
+    `Leitura correta: os cards de antes e depois partem dos clientes da Black, não de todos os clientes desses períodos. Taxas agregadas do período aparecem apenas como contexto. Conferência: ${auditText}`
   );
   renderBlackCohorts(preCohort, postCohort);
 
-  container.innerHTML = periods
+  const recurrenceCards = [
+    preTotals && before
+      ? {
+          className: "is-pre",
+          label: before.label,
+          range: `${formatDate(before.start)} a ${formatDate(before.end)}`,
+          question: "Quem comprou na Black já era cliente recente?",
+          rate: preTotals.priorRate,
+          rateCaption: "da base Black",
+          primaryLabel: "Clientes da Black com compra nos 3 meses antes",
+          primaryValue: `${numberFmt.format(preTotals.priorCustomers)} de ${numberFmt.format(preTotals.blackCustomers)}`,
+          ordersLabel: "Compras desses clientes antes da Black",
+          ordersValue: `${numberFmt.format(preTotals.preOrders)} pedidos | ${currencyFmt.format(preTotals.preRevenue)}`,
+          contextLabel: "Recorrência geral do período",
+          contextValue: `${numberFmt.format(before.repeatCustomers)} clientes com 2+ pedidos (${percentFmt.format(before.repeatCustomerRate)})`,
+          footnote: "Aqui a base não é agosto a outubro inteiro: é a coorte de novembro olhando para trás.",
+        }
+      : null,
+    black
+      ? {
+          className: "is-black",
+          label: black.label,
+          range: `${formatDate(black.start)} a ${formatDate(black.end)}`,
+          question: "Dentro de novembro, quem comprou mais de uma vez?",
+          rate: black.repeatCustomerRate,
+          rateCaption: "dos clientes da Black",
+          primaryLabel: "Clientes que compraram 2+ vezes na Black",
+          primaryValue: `${numberFmt.format(black.repeatCustomers)} de ${numberFmt.format(black.customers)}`,
+          ordersLabel: "Pedidos feitos por esses clientes",
+          ordersValue: `${numberFmt.format(black.repeatOrders)} pedidos | ${percentFmt.format(black.repeatOrderShare)} dos pedidos`,
+          contextLabel: "Carrinho médio geral",
+          contextValue: `${decimalFmt.format(black.avgProductsPerOrder)} itens por pedido`,
+          footnote: "Não é recorrência histórica: mede repetição de pedido dentro do próprio mês da Black.",
+        }
+      : null,
+    postTotals && after
+      ? {
+          className: "is-post",
+          label: after.label,
+          range: `${formatDate(after.start)} a ${formatDate(after.end)}`,
+          question: "A base da Black voltou nos 3 meses seguintes?",
+          rate: postTotals.returnRate,
+          rateCaption: "da base Black",
+          primaryLabel: "Clientes da Black que recompraram depois",
+          primaryValue: `${numberFmt.format(postTotals.returningCustomers)} de ${numberFmt.format(postTotals.blackCustomers)}`,
+          ordersLabel: "Compras desses clientes depois da Black",
+          ordersValue: `${numberFmt.format(postTotals.postOrders)} pedidos | ${currencyFmt.format(postTotals.postRevenue)}`,
+          contextLabel: "Recorrência geral do período",
+          contextValue: `${numberFmt.format(after.repeatCustomers)} clientes com 2+ pedidos (${percentFmt.format(after.repeatCustomerRate)})`,
+          footnote: "Aqui a base não é dezembro a fevereiro inteiro: é a coorte de novembro olhando para frente.",
+        }
+      : null,
+  ].filter(Boolean);
+  const maxCohortRate = Math.max(...recurrenceCards.map((row) => Number(row.rate) || 0), 0.01);
+
+  container.innerHTML = recurrenceCards
     .map((row) => {
-      const repeatRate = Number(row.repeatCustomerRate) || 0;
-      const width = clamp((repeatRate / maxRepeatRate) * 100, 2, 100);
-      const isBlack = row.key === "black";
-      const title = isBlack ? "Clientes que compraram 2+ vezes na Black" : "Clientes com 2+ pedidos no período";
-      const range = `${formatDate(row.start)} a ${formatDate(row.end)}`;
+      const rate = Number(row.rate) || 0;
+      const width = clamp((rate / maxCohortRate) * 100, 2, 100);
 
       return `
-        <article class="recurrence-card${isBlack ? " is-black" : ""}">
+        <article class="recurrence-card ${escapeHtml(row.className)}">
           <div class="recurrence-card-head">
             <span>${escapeHtml(row.label)}</span>
-            <small>${escapeHtml(range)}</small>
+            <small>${escapeHtml(row.range)}</small>
           </div>
-          <strong>${percentFmt.format(repeatRate)}</strong>
+          <p class="recurrence-question">${escapeHtml(row.question)}</p>
+          <div class="recurrence-primary">
+            <strong>${percentFixedFmt.format(rate)}</strong>
+            <small>${escapeHtml(row.rateCaption)}</small>
+          </div>
           <div class="recurrence-bar" aria-hidden="true">
             <span style="width: ${width}%"></span>
           </div>
           <dl>
             <div>
-              <dt>${escapeHtml(title)}</dt>
-              <dd>${numberFmt.format(row.repeatCustomers)} de ${numberFmt.format(row.customers)}</dd>
+              <dt>${escapeHtml(row.primaryLabel)}</dt>
+              <dd>${escapeHtml(row.primaryValue)}</dd>
             </div>
             <div>
-              <dt>Pedidos desses clientes</dt>
-              <dd>${numberFmt.format(row.repeatOrders)} (${percentFmt.format(row.repeatOrderShare)})</dd>
+              <dt>${escapeHtml(row.ordersLabel)}</dt>
+              <dd>${escapeHtml(row.ordersValue)}</dd>
             </div>
             <div>
-              <dt>Carrinho médio geral</dt>
-              <dd>${decimalFmt.format(row.avgProductsPerOrder)} itens/pedido</dd>
+              <dt>${escapeHtml(row.contextLabel)}</dt>
+              <dd>${escapeHtml(row.contextValue)}</dd>
             </div>
           </dl>
+          <p class="recurrence-footnote">${escapeHtml(row.footnote)}</p>
         </article>
       `;
     })
@@ -588,10 +652,10 @@ function renderBlackCohorts(preCohort, postCohort) {
             : Number(row.pctPreRevenue ?? row.pctPostRevenue) || 0;
         const width = clamp(pct * 100, 2, 100);
         const detail = mode === "pre-last"
-          ? `${percentFmt.format(row.pctPrior)} dos com compra previa | ${percentFmt.format(row.pctBlackCustomers)} da base Black`
+          ? `última compra antes da Black | ${percentFmt.format(row.pctBlackCustomers)} da base Black`
           : mode === "post-first"
-          ? `${percentFmt.format(row.pctReturning)} dos retornos | ${percentFmt.format(row.pctBlackCustomers)} da base Black`
-          : `${numberFmt.format(row.orders)} pedidos | ${currencyFmt.format(row.revenue)}`;
+          ? `primeiro retorno depois da Black | ${percentFmt.format(row.pctBlackCustomers)} da base Black`
+          : `compras no mês: ${numberFmt.format(row.orders)} pedidos | ${currencyFmt.format(row.revenue)}`;
 
         return `
           <article class="cohort-month-row">
@@ -630,8 +694,12 @@ function renderBlackCohorts(preCohort, postCohort) {
             <p class="eyebrow">${escapeHtml(config.eyebrow)}</p>
             <h4>${escapeHtml(config.title)}</h4>
           </div>
-          <strong>${numberFmt.format(primaryCustomers)} de ${numberFmt.format(t.blackCustomers)} | ${percentFmt.format(primaryRate)}</strong>
+          <div class="cohort-head-metric">
+            <strong>${numberFmt.format(primaryCustomers)} de ${numberFmt.format(t.blackCustomers)}</strong>
+            <span>${percentFixedFmt.format(primaryRate)} da base Black</span>
+          </div>
         </div>
+        <p class="cohort-panel-copy">${escapeHtml(config.explainer)}</p>
         <div class="post-cohort-kpis">
           <div>
             <span>${escapeHtml(config.ordersLabel)}</span>
@@ -639,14 +707,14 @@ function renderBlackCohorts(preCohort, postCohort) {
             <small>${currencyFmt.format(revenue)} | ${numberFmt.format(units)} unid.</small>
           </div>
           <div>
-            <span>1 pedido na Black</span>
+            <span>${escapeHtml(config.singleLabel)}</span>
             <strong>${percentFmt.format(singleRate)}</strong>
             <small>${numberFmt.format(singleCustomers)} de ${numberFmt.format(t.blackSingleOrderCustomers)} clientes</small>
           </div>
           <div>
-            <span>2+ pedidos na Black</span>
+            <span>${escapeHtml(config.multiLabel)}</span>
             <strong>${percentFmt.format(multiRate)}</strong>
-            <small>${numberFmt.format(multiCustomers)} de ${numberFmt.format(t.blackMultiOrderCustomers)} clientes; ${decimalFmt.format(rateRatio)}x a taxa</small>
+            <small>${numberFmt.format(multiCustomers)} de ${numberFmt.format(t.blackMultiOrderCustomers)} clientes; ${decimalFmt.format(rateRatio)}x vs. 1 pedido</small>
           </div>
         </div>
         <div class="post-cohort-columns">
@@ -655,7 +723,7 @@ function renderBlackCohorts(preCohort, postCohort) {
             <div class="cohort-month-list">${renderMonthRows(config.primaryMonths(cohort), config.primaryMode)}</div>
           </section>
           <section>
-            <h4>Compras no mes</h4>
+            <h4>${escapeHtml(config.purchaseMonthsLabel)}</h4>
             <div class="cohort-month-list">${renderMonthRows(cohort.purchaseMonths || [], config.purchaseMode)}</div>
           </section>
         </div>
@@ -669,9 +737,13 @@ function renderBlackCohorts(preCohort, postCohort) {
       ${renderCohort(preCohort, {
         className: "is-pre",
         eyebrow: "Coorte pre-Black",
-        title: "Clientes de novembro que ja compravam antes",
-        ordersLabel: "Pedidos antes da Black",
-        primaryMonthsLabel: "Ultima compra antes",
+        title: "Quem comprou na Black já comprava antes?",
+        explainer: "Parte dos clientes pagos de novembro e olha para trás: quantos deles fizeram compra paga entre agosto e outubro.",
+        ordersLabel: "Compras desses clientes antes da Black",
+        singleLabel: "Entre clientes de 1 pedido na Black",
+        multiLabel: "Entre clientes de 2+ pedidos na Black",
+        primaryMonthsLabel: "Quando foi a última compra antes",
+        purchaseMonthsLabel: "Volume comprado antes por mês",
         primaryMode: "pre-last",
         purchaseMode: "pre-purchase",
         primaryMonths: (cohort) => cohort.lastPreMonths || [],
@@ -689,9 +761,13 @@ function renderBlackCohorts(preCohort, postCohort) {
       ${renderCohort(postCohort, {
         className: "is-post",
         eyebrow: "Coorte pos-Black",
-        title: "Clientes de novembro que recompraram depois",
-        ordersLabel: "Pedidos no pos-Black",
-        primaryMonthsLabel: "Primeiro retorno",
+        title: "Quem comprou na Black voltou depois?",
+        explainer: "Parte dos clientes pagos de novembro e olha para frente: quantos deles fizeram nova compra paga entre dezembro e fevereiro.",
+        ordersLabel: "Compras desses clientes depois da Black",
+        singleLabel: "Entre clientes de 1 pedido na Black",
+        multiLabel: "Entre clientes de 2+ pedidos na Black",
+        primaryMonthsLabel: "Quando aconteceu o primeiro retorno",
+        purchaseMonthsLabel: "Volume comprado depois por mês",
         primaryMode: "post-first",
         purchaseMode: "post-purchase",
         primaryMonths: (cohort) => cohort.firstReturnMonths || [],

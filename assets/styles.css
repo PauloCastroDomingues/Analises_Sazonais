@@ -868,7 +868,7 @@ code {
 }
 
 .recurrence-card {
-  min-height: 250px;
+  min-height: 306px;
   padding: 18px;
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -883,6 +883,14 @@ code {
   background:
     linear-gradient(180deg, rgba(244, 122, 28, 0.07), rgba(255, 255, 255, 0.014)),
     #23231f;
+}
+
+.recurrence-card.is-pre {
+  border-color: rgba(238, 196, 78, 0.24);
+}
+
+.recurrence-card.is-post {
+  border-color: rgba(42, 188, 177, 0.28);
 }
 
 .recurrence-card-head {
@@ -909,11 +917,33 @@ code {
   white-space: nowrap;
 }
 
-.recurrence-card strong {
+.recurrence-question {
+  min-height: 42px;
+  margin: -4px 0 0;
+  color: #ffffff;
+  font-size: 0.84rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.recurrence-primary {
+  display: grid;
+  gap: 4px;
+}
+
+.recurrence-primary strong {
   color: #ffffff;
   font-size: clamp(1.8rem, 2.4vw, 2.3rem);
   line-height: 1;
   font-weight: 900;
+}
+
+.recurrence-primary small {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .recurrence-bar {
@@ -960,6 +990,16 @@ code {
   font-size: 0.88rem;
   font-weight: 800;
   line-height: 1.25;
+}
+
+.recurrence-footnote {
+  margin: auto 0 0;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 720;
+  line-height: 1.35;
 }
 
 .recurrence-note {
@@ -1024,6 +1064,37 @@ code {
   line-height: 1;
   font-weight: 900;
   text-align: right;
+}
+
+.cohort-head-metric {
+  flex: 0 0 auto;
+  display: grid;
+  gap: 5px;
+  text-align: right;
+}
+
+.cohort-head-metric strong {
+  color: #ffffff;
+  font-size: clamp(1.12rem, 1.6vw, 1.5rem);
+  line-height: 1;
+  font-weight: 900;
+}
+
+.cohort-head-metric span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.cohort-panel-copy {
+  min-height: 48px;
+  margin: -2px 0 14px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 720;
+  line-height: 1.45;
 }
 
 .post-cohort-kpis {
@@ -2363,6 +2434,10 @@ th {
   }
 
   .post-cohort-head > strong {
+    text-align: left;
+  }
+
+  .cohort-head-metric {
     text-align: left;
   }
 
