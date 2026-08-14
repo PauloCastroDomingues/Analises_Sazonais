@@ -15152,12 +15152,87 @@
     }
   ],
   "recurrenceExpanded": {
-    "basis": "Comparacao agregada por customer_sk e pedidos unicos. Antes/depois vem das planilhas fornecidas em 2026-08-14; Black usa recompra_calc/local snapshot. Nao prova coorte cashback sem cruzar os customer_sk da Black contra o periodo pos-Black.",
-    "cohortStatus": "coorte_exata_pendente",
-    "cohortLimitation": "O cruzamento exato dos 86% de novos clientes exige uma base unificada ou autorizacao manual de IMPORTRANGE; o teste em copia auxiliar retornou #REF! pedindo conexao no navegador.",
+    "basis": "Comparacao agregada por customer_sk e pedidos unicos. Antes/depois vem das planilhas fornecidas em 2026-08-14; Black usa recompra_calc/local snapshot.",
+    "cohortStatus": "coorte_exata_calculada",
+    "cohortLimitation": "A coorte pos-Black mede todos os clientes de novembro que voltaram em dez/2025, jan/2026 ou fev/2026. Para isolar apenas os 86% de clientes historicamente novos, precisa de um marcador de cliente novo versus antigo na base Black.",
     "sourceSheets": {
       "before": "https://docs.google.com/spreadsheets/d/131VtNxUdUT5xNDGFz9NJob4KuUu939vXIrRdY45jo1I/edit?gid=288247892#gid=288247892",
       "after": "https://docs.google.com/spreadsheets/d/1gIUCPbFc5h3Uu0vYttQv5Xr39sxOatQQkn4gG6PjKBA/edit?gid=890569835#gid=890569835"
+    },
+    "postBlackCohort": {
+      "sourceSheet": "coorte_pos_black_calc",
+      "basis": "Clientes pagos de novembro cruzados por customer_sk com pedidos pagos de 2025-12-01 a 2026-02-28. Receita pos-Black soma line_net_amount de linhas pagas; pedidos pos-Black contam order_key unico.",
+      "totals": {
+        "blackCustomers": 10383,
+        "returningCustomers": 731,
+        "returnRate": 0.07040354425503226,
+        "postOrders": 862,
+        "postUnits": 1801,
+        "postRevenue": 691580,
+        "avgPostOrdersPerReturningCustomer": 1.1792065663474691,
+        "avgPostRevenuePerReturningCustomer": 946.0738714090287,
+        "blackSingleOrderCustomers": 9640,
+        "blackSingleOrderReturningCustomers": 625,
+        "blackSingleOrderReturnRate": 0.06483402489626557,
+        "blackMultiOrderCustomers": 743,
+        "blackMultiOrderReturningCustomers": 106,
+        "blackMultiOrderReturnRate": 0.1426648721399731,
+        "multiVsSingleReturnRate": 2.2004629878869446
+      },
+      "firstReturnMonths": [
+        {
+          "month": "2025-12",
+          "label": "Dez/25",
+          "customers": 392,
+          "pctReturning": 0.5362517099863201,
+          "pctBlackCustomers": 0.03775402099585862
+        },
+        {
+          "month": "2026-01",
+          "label": "Jan/26",
+          "customers": 204,
+          "pctReturning": 0.27906976744186046,
+          "pctBlackCustomers": 0.019647500722334586
+        },
+        {
+          "month": "2026-02",
+          "label": "Fev/26",
+          "customers": 135,
+          "pctReturning": 0.18467852257181944,
+          "pctBlackCustomers": 0.013002022536839063
+        }
+      ],
+      "purchaseMonths": [
+        {
+          "month": "2025-12",
+          "label": "Dez/25",
+          "customers": 392,
+          "orders": 426,
+          "revenue": 304902,
+          "pctPostRevenue": 0.44087741114549295
+        },
+        {
+          "month": "2026-01",
+          "label": "Jan/26",
+          "customers": 236,
+          "orders": 255,
+          "revenue": 265460,
+          "pctPostRevenue": 0.38384568668845254
+        },
+        {
+          "month": "2026-02",
+          "label": "Fev/26",
+          "customers": 168,
+          "orders": 181,
+          "revenue": 121218,
+          "pctPostRevenue": 0.17527690216605454
+        }
+      ],
+      "insights": [
+        "731 dos 10.383 clientes da Black voltaram nos 3 meses seguintes, taxa de 7,0%.",
+        "Quem comprou 2+ vezes na Black retornou 14,3%, contra 6,5% entre clientes de 1 pedido.",
+        "Dezembro concentrou 392 primeiros retornos, 53,6% dos clientes que voltaram."
+      ]
     },
     "periods": [
       {
@@ -15221,7 +15296,7 @@
     ],
     "insights": [
       "A Black concentrou aquisicao e compra unica: clientes com 2+ pedidos cairam para 7,2%, abaixo dos 9,6% pre e 9,0% pos.",
-      "No pos-Black, a recorrencia agregada volta para 9,0%, mas isso nao comprova que os novos da Black retornaram; precisa de coorte por customer_sk.",
+      "Na coorte exata, 731 clientes de novembro voltaram nos 3 meses seguintes, 7,0% dos clientes Black.",
       "Carrinho medio geral da Black foi 1,56 item por pedido; os 2,74 itens por pedido sao apenas pedidos com 2+ itens."
     ]
   }

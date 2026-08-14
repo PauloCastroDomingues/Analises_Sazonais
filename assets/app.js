@@ -502,6 +502,7 @@ function renderExpandedRecurrence() {
   if (!recurrence || !container) return;
 
   const periods = recurrence.periods || [];
+  const cohort = recurrence.postBlackCohort;
   const maxRepeatRate = Math.max(...periods.map((row) => Number(row.repeatCustomerRate) || 0), 0.01);
   const black = periods.find((row) => row.key === "black");
   const after = periods.find((row) => row.key === "after_3m");
@@ -510,14 +511,18 @@ function renderExpandedRecurrence() {
 
   setText(
     "recurrenceExpandedInsight",
-    after && black
+    cohort?.totals
+      ? `${numberFmt.format(cohort.totals.returningCustomers)} clientes de novembro voltaram nos 3 meses seguintes (${percentFmt.format(cohort.totals.returnRate)} da base Black).`
+      : after && black
       ? `Depois da Black, a recorrência agregada ficou ${decimalFmt.format(Math.abs(deltaAfterBlack) * 100)} p.p. ${direction} de novembro; isso ainda não prova retorno da coorte nova.`
       : recurrence.insights?.[0] || "Comparação agregada entre antes, Black e depois."
   );
   setText(
     "recurrenceExpandedNote",
-    "Leitura agregada: para medir cashback, precisa cruzar os clientes novos da Black contra os pedidos de dezembro, janeiro e fevereiro em uma base unificada."
+    recurrence.cohortLimitation ||
+      "Leitura agregada: para medir cashback, precisa cruzar os clientes novos da Black contra os pedidos de dezembro, janeiro e fevereiro em uma base unificada."
   );
+  renderPostBlackCohort(cohort);
 
   container.innerHTML = periods
     .map((row) => {
@@ -555,6 +560,84 @@ function renderExpandedRecurrence() {
       `;
     })
     .join("");
+}
+
+function renderPostBlackCohort(cohort) {
+  const el = document.getElementById("postBlackCohort");
+  if (!el) return;
+
+  if (!cohort?.totals) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+
+  const t = cohort.totals;
+  const firstMonths = cohort.firstReturnMonths || [];
+  const purchaseMonths = cohort.purchaseMonths || [];
+
+  const renderMonthRows = (rows, mode) =>
+    rows
+      .map((row) => {
+        const isFirstReturn = mode === "first";
+        const pct = Number(isFirstReturn ? row.pctReturning : row.pctPostRevenue) || 0;
+        const width = clamp(pct * 100, 2, 100);
+        const detail = isFirstReturn
+          ? `${percentFmt.format(row.pctReturning)} dos retornos | ${percentFmt.format(row.pctBlackCustomers)} da base Black`
+          : `${numberFmt.format(row.orders)} pedidos | ${currencyFmt.format(row.revenue)}`;
+
+        return `
+          <article class="cohort-month-row">
+            <header>
+              <span>${escapeHtml(row.label)}</span>
+              <strong>${numberFmt.format(row.customers)} clientes</strong>
+            </header>
+            <div class="cohort-month-bar" aria-hidden="true">
+              <span style="width: ${width}%"></span>
+            </div>
+            <small>${escapeHtml(detail)}</small>
+          </article>
+        `;
+      })
+      .join("");
+
+  el.hidden = false;
+  el.innerHTML = `
+    <div class="post-cohort-head">
+      <div>
+        <p class="eyebrow">Coorte pos-Black</p>
+        <h4>Clientes de novembro que recompraram nos 3 meses seguintes</h4>
+      </div>
+      <strong>${numberFmt.format(t.returningCustomers)} de ${numberFmt.format(t.blackCustomers)} | ${percentFmt.format(t.returnRate)}</strong>
+    </div>
+    <div class="post-cohort-kpis">
+      <div>
+        <span>Pedidos no pos-Black</span>
+        <strong>${numberFmt.format(t.postOrders)}</strong>
+        <small>${currencyFmt.format(t.postRevenue)} | ${numberFmt.format(t.postUnits)} unid.</small>
+      </div>
+      <div>
+        <span>1 pedido na Black</span>
+        <strong>${percentFmt.format(t.blackSingleOrderReturnRate)}</strong>
+        <small>${numberFmt.format(t.blackSingleOrderReturningCustomers)} de ${numberFmt.format(t.blackSingleOrderCustomers)} voltaram</small>
+      </div>
+      <div>
+        <span>2+ pedidos na Black</span>
+        <strong>${percentFmt.format(t.blackMultiOrderReturnRate)}</strong>
+        <small>${numberFmt.format(t.blackMultiOrderReturningCustomers)} de ${numberFmt.format(t.blackMultiOrderCustomers)} voltaram; ${decimalFmt.format(t.multiVsSingleReturnRate)}x a taxa</small>
+      </div>
+    </div>
+    <div class="post-cohort-columns">
+      <section>
+        <h4>Primeiro retorno</h4>
+        <div class="cohort-month-list">${renderMonthRows(firstMonths, "first")}</div>
+      </section>
+      <section>
+        <h4>Compras no mes</h4>
+        <div class="cohort-month-list">${renderMonthRows(purchaseMonths, "purchase")}</div>
+      </section>
+    </div>
+  `;
 }
 
 function renderOverview() {

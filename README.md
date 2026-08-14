@@ -36,7 +36,7 @@ Tela atual:
 - Primeira tela com 6 cards alinhados em grade `3 x 2`.
 - Cada card da analise principal tem a mesma estrutura e 6 linhas uteis para evitar espacos vazios.
 - Abas de detalhamento continuam abaixo da analise principal.
-- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-recorrencia-v1` e `assets/app.js?v=20260814-recorrencia-v1`.
+- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-coorte-pos-v1` e `assets/app.js?v=20260814-coorte-pos-v1`.
 - Abaixo dos 6 cards principais existe uma secao executiva de `Comportamento de compra`.
 - Abaixo de `Comportamento de compra` existe uma secao executiva de `Heat map por semana, dia e horario`.
 
@@ -53,8 +53,12 @@ O que foi ajustado:
   - 3 meses antes: `997` de `10.404` clientes com 2+ pedidos, taxa `9,6%`.
   - Black 2025: `743` de `10.383` clientes com 2+ pedidos, taxa `7,2%`.
   - 3 meses depois: `801` de `8.911` clientes com 2+ pedidos, taxa `9,0%`.
-- Observacao metodologica: essa comparacao e agregada por periodo. Para provar se os 86% de clientes novos da Black voltaram para usar cashback em dezembro/janeiro, ainda precisa cruzar os mesmos `customer_sk` da Black contra a base pos-Black.
-- Cache dos assets atualizado para `20260814-recorrencia-v1`.
+- Coorte pos-Black calculada na aba `coorte_pos_black_calc`: `731` de `10.383` clientes de novembro voltaram entre dez/2025 e fev/2026, taxa `7,0%`.
+- Esses clientes fizeram `862` pedidos, compraram `1.801` unidades e geraram `R$ 691.580` no pos-Black.
+- Clientes que fizeram `2+` pedidos na Black retornaram `14,3%` (`106/743`), contra `6,5%` (`625/9.640`) entre clientes de 1 pedido.
+- Primeiro retorno: Dez/25 `392` clientes, Jan/26 `204` clientes e Fev/26 `135` clientes.
+- Observacao metodologica: a coorte pos-Black mede todos os clientes pagos de novembro que voltaram nos 3 meses seguintes. Para isolar apenas os `86%` de clientes historicamente novos, precisa de um marcador de cliente novo versus antigo na base Black.
+- Cache dos assets atualizado para `20260814-coorte-pos-v1`.
 
 ## Atualizacao de 2026-08-14 - Tooltips, faixas em reais e dropdown de cores
 
