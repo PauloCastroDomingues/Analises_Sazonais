@@ -22,7 +22,8 @@
       "Itens com desconto integral fora dessa lista permanecem fora do ranking de brindes.",
       "Recompra e pedidos multiproduto calculados na aba recompra_calc da copia de trabalho, usando apenas itens pagos no periodo.",
       "Heat map recalculado na aba heatmap_calc e exportado em heatmap_day_hour_values: semana fixa de novembro, dia do mes e hora local Sao Paulo.",
-      "Escopo principal ajustado pelo usuario: analisar somente Tenis, Mochilas e Brindes oficiais; demais linhas pagas ficam fora da analise principal."
+      "Escopo principal ajustado pelo usuario: analisar somente Tenis, Mochilas e Brindes oficiais; demais linhas pagas ficam fora da analise principal.",
+      "Top produto por faixa e detalhamento de cores por linha calculados na aba codex_dashboard_calc da copia de trabalho."
     ]
   },
   "totals": {
@@ -14589,5 +14590,564 @@
     ],
     "sourceSheet": "scope_calc",
     "sourceRange": "I1:O25"
-  }
+  },
+  "priceBandTopProducts": [
+    {
+      "band": "Abaixo de 400",
+      "product": "Tênis Casual Branco RS7 - Branco",
+      "units": 1228,
+      "revenue": 380607.61
+    },
+    {
+      "band": "400 a 500",
+      "product": "Tênis Casual Branco RS7 - Branco",
+      "units": 295,
+      "revenue": 129848.68
+    },
+    {
+      "band": "500 a 600",
+      "product": "Tênis Casual Nobuck Cinza RS8 Avant - Cinza",
+      "units": 96,
+      "revenue": 52156.17
+    },
+    {
+      "band": "600 a 700",
+      "product": "Tênis Casual Nobuck Cinza RS8 Avant - Cinza",
+      "units": 67,
+      "revenue": 40870
+    },
+    {
+      "band": "Acima de 700",
+      "product": "Tênis Casual Off White RS6 GT - Off White",
+      "units": 47,
+      "revenue": 35125.02
+    }
+  ],
+  "lineColorBreakdown": [
+    {
+      "line": "911",
+      "product": "Tênis Casual 911 Preto - Preto",
+      "color": "Preto",
+      "units": 168,
+      "revenue": 74374.83
+    },
+    {
+      "line": "911",
+      "product": "Tênis Casual All Black 911 - All Black",
+      "color": "All Black",
+      "units": 115,
+      "revenue": 38097.83
+    },
+    {
+      "line": "911",
+      "product": "Tênis Casual Nobuck Marrom 911 - Marrom",
+      "color": "Marrom",
+      "units": 109,
+      "revenue": 48399.62
+    },
+    {
+      "line": "911",
+      "product": "Tênis Casual Branco 911 - Branco",
+      "color": "Branco",
+      "units": 107,
+      "revenue": 45692.69
+    },
+    {
+      "line": "911 Carrera",
+      "product": "Tênis Casual Cinza Carrera - Cinza",
+      "color": "Cinza",
+      "units": 154,
+      "revenue": 48405.17
+    },
+    {
+      "line": "911 Carrera",
+      "product": "Tênis Casual Branco Carrera - Branco",
+      "color": "Branco",
+      "units": 125,
+      "revenue": 40905.25
+    },
+    {
+      "line": "911 Carrera",
+      "product": "Tênis Casual Marrom Carrera - Marrom",
+      "color": "Marrom",
+      "units": 116,
+      "revenue": 37572.54
+    },
+    {
+      "line": "911 Carrera",
+      "product": "Tênis Casual Verde Carrera - Verde",
+      "color": "Verde",
+      "units": 112,
+      "revenue": 34136.18
+    },
+    {
+      "line": "911 Carrera",
+      "product": "Tênis Casual Preto Carrera - Preto",
+      "color": "Preto",
+      "units": 98,
+      "revenue": 31582.51
+    },
+    {
+      "line": "911 GT",
+      "product": "Tênis Casual Branco 911 GT - Branco",
+      "color": "Branco",
+      "units": 184,
+      "revenue": 91271.73
+    },
+    {
+      "line": "911 GT",
+      "product": "Tênis Casual Off White 911 GT - Off White",
+      "color": "Off White",
+      "units": 107,
+      "revenue": 37802.32
+    },
+    {
+      "line": "911 GT",
+      "product": "Tênis Casual All Black 911 GT - All Black",
+      "color": "All Black",
+      "units": 73,
+      "revenue": 29194.28
+    },
+    {
+      "line": "911 GT",
+      "product": "Tênis Casual Preto 911 GT - Preto",
+      "color": "Preto",
+      "units": 69,
+      "revenue": 34301.3
+    },
+    {
+      "line": "911 GT",
+      "product": "Tênis de Camurça Off White 911 GT - Camurça",
+      "color": "Camurça",
+      "units": 64,
+      "revenue": 32095.36
+    },
+    {
+      "line": "911 GT",
+      "product": "Tênis Casual Preto Couro Liso 911 GT - Preto",
+      "color": "Preto",
+      "units": 19,
+      "revenue": 5444.44
+    },
+    {
+      "line": "Macan",
+      "product": "Tênis Casual Nobuck Marrom Macan I - Marrom",
+      "color": "Marrom",
+      "units": 180,
+      "revenue": 74508.13
+    },
+    {
+      "line": "Macan",
+      "product": "Tênis Casual Nobuck Preto Macan I - Preto",
+      "color": "Preto",
+      "units": 96,
+      "revenue": 36809.57
+    },
+    {
+      "line": "Macan",
+      "product": "Tênis Casual Branco Macan - Branco",
+      "color": "Branco",
+      "units": 62,
+      "revenue": 24945.13
+    },
+    {
+      "line": "RS Knit",
+      "product": "Tênis Casual Knit Preto RS - Preto",
+      "color": "Preto",
+      "units": 511,
+      "revenue": 170192.51
+    },
+    {
+      "line": "RS Knit",
+      "product": "Tênis Casual Azul Marinho RS Knit - Azul-marinho",
+      "color": "Azul-marinho",
+      "units": 309,
+      "revenue": 100917.31
+    },
+    {
+      "line": "RS Knit",
+      "product": "Tênis Casual Knit All Black - All Black",
+      "color": "All Black",
+      "units": 207,
+      "revenue": 67676.06
+    },
+    {
+      "line": "RS Knit",
+      "product": "Tênis Casual Knit Branco RS - Branco",
+      "color": "Branco",
+      "units": 144,
+      "revenue": 44549.11
+    },
+    {
+      "line": "RS Knit",
+      "product": "Tênis Casual Knit Preto RS",
+      "color": "Sem cor",
+      "units": 2,
+      "revenue": 660
+    },
+    {
+      "line": "RS Knit",
+      "product": "Tênis Casual Azul Marinho RS Knit",
+      "color": "Sem cor",
+      "units": 1,
+      "revenue": 330
+    },
+    {
+      "line": "RS Knit GT",
+      "product": "Tênis Casual Marinho RS Knit GT - Azul-marinho",
+      "color": "Azul-marinho",
+      "units": 93,
+      "revenue": 30195.95
+    },
+    {
+      "line": "RS Knit GT",
+      "product": "Tênis Casual Branco RS Knit GT - Branco",
+      "color": "Branco",
+      "units": 71,
+      "revenue": 24448.68
+    },
+    {
+      "line": "RS Knit GT",
+      "product": "Tênis Casual Preto RS Knit GT - Preto",
+      "color": "Preto",
+      "units": 58,
+      "revenue": 29477.81
+    },
+    {
+      "line": "RS Knit GT",
+      "product": "Tênis Casual All Black RS Knit GT - All Black",
+      "color": "All Black",
+      "units": 50,
+      "revenue": 25500.09
+    },
+    {
+      "line": "RS Knit GT",
+      "product": "Tênis Casual Verde RS Knit GT - Verde",
+      "color": "Verde",
+      "units": 41,
+      "revenue": 14259.1
+    },
+    {
+      "line": "RS Knit GT",
+      "product": "Tênis Casual Cinza RS Knit GT - Cinza",
+      "color": "Cinza",
+      "units": 38,
+      "revenue": 24795.64
+    },
+    {
+      "line": "RS Knit GT",
+      "product": "Tênis Casual Marinho RS Knit GT",
+      "color": "Sem cor",
+      "units": 1,
+      "revenue": 330
+    },
+    {
+      "line": "RS3",
+      "product": "Tênis Casual Branco Masculino RS3 - Branco",
+      "color": "Branco",
+      "units": 225,
+      "revenue": 71824.84
+    },
+    {
+      "line": "RS3",
+      "product": "Tênis Casual Preto RS3 - Preto",
+      "color": "Preto",
+      "units": 72,
+      "revenue": 24303.68
+    },
+    {
+      "line": "RS3",
+      "product": "Tênis Casual Marrom RS3 - Marrom",
+      "color": "Marrom",
+      "units": 53,
+      "revenue": 17385.19
+    },
+    {
+      "line": "RS6",
+      "product": "Tênis Casual Branco RS6 - Branco",
+      "color": "Branco",
+      "units": 1174,
+      "revenue": 376848.76
+    },
+    {
+      "line": "RS6",
+      "product": "Tênis Casual Nobuck Marrom Stoned RS6 - Marrom",
+      "color": "Marrom",
+      "units": 652,
+      "revenue": 206575.26
+    },
+    {
+      "line": "RS6",
+      "product": "Tênis Casual Preto RS6 - Preto",
+      "color": "Preto",
+      "units": 431,
+      "revenue": 134811.04
+    },
+    {
+      "line": "RS6",
+      "product": "Tênis Casual All Black RS6 - All Black",
+      "color": "All Black",
+      "units": 226,
+      "revenue": 70486.79
+    },
+    {
+      "line": "RS6",
+      "product": "Tênis Casual Branco RS6",
+      "color": "Sem cor",
+      "units": 1,
+      "revenue": 330
+    },
+    {
+      "line": "RS6",
+      "product": "Tênis Casual Nobuck Marrom Stoned RS6",
+      "color": "Sem cor",
+      "units": 1,
+      "revenue": 330
+    },
+    {
+      "line": "RS6 Avant",
+      "product": "Tênis Casual Off White RS6 Avant - Off White",
+      "color": "Off White",
+      "units": 135,
+      "revenue": 45944.53
+    },
+    {
+      "line": "RS6 Avant",
+      "product": "Tênis Casual Branco RS6 Avant - Branco",
+      "color": "Branco",
+      "units": 86,
+      "revenue": 30801.97
+    },
+    {
+      "line": "RS6 Avant",
+      "product": "Tênis Casual Marinho RS6 Avant - Azul-marinho",
+      "color": "Azul-marinho",
+      "units": 66,
+      "revenue": 22091.8
+    },
+    {
+      "line": "RS6 GT",
+      "product": "Tênis Casual Off White RS6 GT - Off White",
+      "color": "Off White",
+      "units": 180,
+      "revenue": 114521.61
+    },
+    {
+      "line": "RS6 GT",
+      "product": "Tênis Casual Branco RS6 GT - Branco",
+      "color": "Branco",
+      "units": 148,
+      "revenue": 82074
+    },
+    {
+      "line": "RS6 GT",
+      "product": "Tênis Casual Nobuck Marinho RS6 GT - Azul-marinho",
+      "color": "Azul-marinho",
+      "units": 103,
+      "revenue": 52630.98
+    },
+    {
+      "line": "RS6 GT",
+      "product": "Tênis Casual All Black RS6 GT - All Black",
+      "color": "All Black",
+      "units": 73,
+      "revenue": 45351.87
+    },
+    {
+      "line": "RS6 GT",
+      "product": "Tênis Casual Nobuck Marrom RS6 GT - Marrom",
+      "color": "Marrom",
+      "units": 58,
+      "revenue": 28663.61
+    },
+    {
+      "line": "RS6 GT",
+      "product": "Tênis Casual Marrom RS6 GT - Marrom",
+      "color": "Marrom",
+      "units": 35,
+      "revenue": 14806.25
+    },
+    {
+      "line": "RS6 GT",
+      "product": "Tênis Casual Nobuck Marinho RS6 GT",
+      "color": "Sem cor",
+      "units": 1,
+      "revenue": 530
+    },
+    {
+      "line": "RS6 GT",
+      "product": "Tênis Casual Off White RS6 GT",
+      "color": "Sem cor",
+      "units": 1,
+      "revenue": 749
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual Branco RS7 - Branco",
+      "color": "Branco",
+      "units": 1523,
+      "revenue": 510456.29
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual Marrom RS7 - Marrom",
+      "color": "Marrom",
+      "units": 374,
+      "revenue": 122131.02
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual Preto RS7 - Preto",
+      "color": "Preto",
+      "units": 315,
+      "revenue": 106095.97
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual All Black RS7 - All Black",
+      "color": "All Black",
+      "units": 263,
+      "revenue": 86077.98
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual Cinza RS7 - Cinza",
+      "color": "Cinza",
+      "units": 98,
+      "revenue": 41854.52
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual Black RS7 - Edição Limitada - Preto",
+      "color": "Preto",
+      "units": 10,
+      "revenue": 2934.5
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual Branco RS7",
+      "color": "Sem cor",
+      "units": 4,
+      "revenue": 1467
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual Marrom RS7",
+      "color": "Sem cor",
+      "units": 2,
+      "revenue": 807
+    },
+    {
+      "line": "RS7",
+      "product": "Tênis Casual All Black RS7",
+      "color": "Sem cor",
+      "units": 1,
+      "revenue": 330
+    },
+    {
+      "line": "RS7 Avant",
+      "product": "Tênis Casual Off White RS7 Avant - Off White",
+      "color": "Off White",
+      "units": 85,
+      "revenue": 47136.9
+    },
+    {
+      "line": "RS7 Avant",
+      "product": "Tênis Casual Preto RS7 Avant - Preto",
+      "color": "Preto",
+      "units": 77,
+      "revenue": 40591.28
+    },
+    {
+      "line": "RS7 Avant",
+      "product": "Tênis Casual Marrom RS7 Avant - Marrom",
+      "color": "Marrom",
+      "units": 20,
+      "revenue": 9423
+    },
+    {
+      "line": "RS8",
+      "product": "Tênis Casual Nobuck Cinza RS8 - Cinza",
+      "color": "Cinza",
+      "units": 266,
+      "revenue": 85261.42
+    },
+    {
+      "line": "RS8",
+      "product": "Tênis Casual Nobuck Preto RS8 - Preto",
+      "color": "Preto",
+      "units": 106,
+      "revenue": 34226.49
+    },
+    {
+      "line": "RS8",
+      "product": "Tênis Casual Nobuck Azul Marinho RS8 - Azul-marinho",
+      "color": "Azul-marinho",
+      "units": 84,
+      "revenue": 22833.16
+    },
+    {
+      "line": "RS8",
+      "product": "Tênis Casual Nobuck Cinza RS8",
+      "color": "Sem cor",
+      "units": 1,
+      "revenue": 330
+    },
+    {
+      "line": "RS8 Avant",
+      "product": "Tênis Casual Nobuck Cinza RS8 Avant - Cinza",
+      "color": "Cinza",
+      "units": 220,
+      "revenue": 118535.11
+    },
+    {
+      "line": "RS8 Avant",
+      "product": "Tênis Casual Branco RS8 Avant - Branco",
+      "color": "Branco",
+      "units": 107,
+      "revenue": 57886.44
+    },
+    {
+      "line": "RS8 Avant",
+      "product": "Tênis Casual Nobuck Marrom Oliva RS8 Avant - Oliva",
+      "color": "Oliva",
+      "units": 100,
+      "revenue": 54571.03
+    },
+    {
+      "line": "RS8 Avant",
+      "product": "Tênis Casual Preto RS8 Avant - Preto",
+      "color": "Preto",
+      "units": 60,
+      "revenue": 31303.12
+    },
+    {
+      "line": "RSX",
+      "product": "Tênis Casual Branco RSX - Branco",
+      "color": "Branco",
+      "units": 154,
+      "revenue": 47493.93
+    },
+    {
+      "line": "RSX",
+      "product": "Tênis Casual Marrom RSX - Marrom",
+      "color": "Marrom",
+      "units": 99,
+      "revenue": 30939.44
+    },
+    {
+      "line": "RSX",
+      "product": "Tênis Casual Preto RSX - Preto",
+      "color": "Preto",
+      "units": 96,
+      "revenue": 28852.79
+    },
+    {
+      "line": "RSX",
+      "product": "Tênis Casual All Black RSX - All Black",
+      "color": "All Black",
+      "units": 68,
+      "revenue": 20688.14
+    }
+  ]
 }

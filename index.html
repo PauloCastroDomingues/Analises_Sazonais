@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard Black 2025 - Reise</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260813-vercel-mobile-v1">
+    <link rel="stylesheet" href="assets/styles.css?v=20260814-cards-tooltips-v2">
   </head>
   <body>
     <header class="topbar">
@@ -31,7 +31,10 @@
       <section class="executive-brief" aria-label="Resumo executivo para apresentacao">
         <div class="brief-copy">
           <p class="eyebrow">Resumo executivo</p>
-          <h2>Forecast de compras Black 2025</h2>
+          <div class="heading-with-tooltip">
+            <h2>Forecast de compras Black 2025</h2>
+            <button class="info-tooltip" type="button" aria-label="O que esta analise mostra" data-tooltip="Resume os principais sinais para compra: semana forte, dia da Black, linha lider e faixa em reais.">i</button>
+          </div>
           <p id="briefThesis">-</p>
         </div>
         <div class="brief-grid">
@@ -51,7 +54,7 @@
             <small id="briefLineDetail">-</small>
           </article>
           <article class="brief-card">
-            <span>Faixa de preco</span>
+            <span>Faixa em R$</span>
             <strong id="briefBandSignal">-</strong>
             <small id="briefBandDetail">-</small>
           </article>
@@ -85,7 +88,10 @@
         <div class="analysis-head">
           <div>
             <p class="eyebrow">Análise principal</p>
-            <h2>Black 2025 para compras</h2>
+            <div class="heading-with-tooltip">
+              <h2>Black 2025 para compras</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta analise mostra" data-tooltip="Consolida os seis cortes principais do estudo: linhas, faixas em reais, mochilas, valor e brindes.">i</button>
+            </div>
           </div>
           <p>Escopo principal: tênis, mochilas e brindes oficiais. Demais linhas ficam fora da análise.</p>
         </div>
@@ -95,7 +101,10 @@
             <div class="analysis-card-head">
               <span>01</span>
               <div>
-                <h3>Ranking linhas mais vendidas</h3>
+                <div class="card-title-line">
+                  <h3>Ranking linhas mais vendidas</h3>
+                  <button class="info-tooltip" type="button" aria-label="O que este ranking mostra" data-tooltip="Mostra as linhas de tenis com maior volume e abre o detalhe de produto e cor dentro de cada linha.">i</button>
+                </div>
                 <p>RS6, RS7, RS Knit, 911 e demais.</p>
               </div>
               <strong id="mainLineSignal">-</strong>
@@ -107,8 +116,11 @@
             <div class="analysis-card-head">
               <span>02</span>
               <div>
-                <h3>Faixa de valor que mais vendeu</h3>
-                <p>400-500, 500-600, 600-700 e demais.</p>
+                <div class="card-title-line">
+                  <h3>Faixa de valor em R$</h3>
+                  <button class="info-tooltip" type="button" aria-label="O que esta faixa mostra" data-tooltip="Agrupa produtos pagos por preco em reais e destaca o top 1 produto vendido em cada faixa.">i</button>
+                </div>
+                <p>Abaixo de R$ 400, R$ 400-500, R$ 500-600 e demais.</p>
               </div>
               <strong id="mainBandSignal">-</strong>
             </div>
@@ -119,7 +131,10 @@
             <div class="analysis-card-head">
               <span>03</span>
               <div>
-                <h3>Representatividade de mochilas</h3>
+                <div class="card-title-line">
+                  <h3>Representatividade de mochilas</h3>
+                  <button class="info-tooltip" type="button" aria-label="O que esta analise mostra" data-tooltip="Compara mochilas contra o escopo pago analisado para medir peso de volume e receita.">i</button>
+                </div>
                 <p>Mochilas são o único acessório analisado.</p>
               </div>
               <strong id="mainAccessorySignal">-</strong>
@@ -131,7 +146,10 @@
             <div class="analysis-card-head">
               <span>03.1</span>
               <div>
-                <h3>Mochilas: ranking</h3>
+                <div class="card-title-line">
+                  <h3>Mochilas: ranking</h3>
+                  <button class="info-tooltip" type="button" aria-label="O que este ranking mostra" data-tooltip="Lista os modelos de mochila que puxaram o volume dentro da categoria.">i</button>
+                </div>
                 <p>Modelos mais vendidos.</p>
               </div>
               <strong id="mainBackpackSignal">-</strong>
@@ -143,7 +161,10 @@
             <div class="analysis-card-head">
               <span>04</span>
               <div>
-                <h3>Percentual por valor de produto</h3>
+                <div class="card-title-line">
+                  <h3>Percentual por valor de produto</h3>
+                  <button class="info-tooltip" type="button" aria-label="O que este percentual mostra" data-tooltip="Mostra como unidades e receita se distribuem entre as faixas de preco em reais.">i</button>
+                </div>
                 <p>Unidades e receita por faixa.</p>
               </div>
               <strong id="mainValueShareSignal">-</strong>
@@ -155,7 +176,10 @@
             <div class="analysis-card-head">
               <span>05</span>
               <div>
-                <h3>Brindes que mais saíram</h3>
+                <div class="card-title-line">
+                  <h3>Brindes que mais saíram</h3>
+                  <button class="info-tooltip" type="button" aria-label="O que este ranking mostra" data-tooltip="Mostra quais brindes oficiais tiveram maior saida e seu valor de tabela.">i</button>
+                </div>
                 <p>Volume, percentual e valor tabela.</p>
               </div>
               <strong id="mainGiftSignal">-</strong>
@@ -165,11 +189,14 @@
         </div>
       </section>
 
-      <section class="one-glance" aria-label="Cesta 2+ e recompra">
+      <section class="one-glance" aria-label="Comportamento de compra">
         <div class="one-glance-head">
           <div>
-            <p class="eyebrow">Comportamento de cesta</p>
-            <h2>Cesta 2+ e recompra</h2>
+            <p class="eyebrow">Comportamento de compra</p>
+            <div class="heading-with-tooltip">
+              <h2>Comportamento de compra</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta analise mostra" data-tooltip="Mede pedidos com 2 ou mais itens pagos e clientes que voltaram a comprar durante novembro.">i</button>
+            </div>
           </div>
           <p>Pedidos com 2+ itens pagos e clientes com 2+ pedidos no mês.</p>
         </div>
@@ -182,17 +209,17 @@
 
         <div class="decision-grid">
           <article class="decision-card accent-amber">
-            <span>Cesta 2+ (mesmo pedido)</span>
+            <span>Pedidos com 2+ itens</span>
             <strong id="multiOrderShare">-</strong>
             <p id="multiOrderDetail">-</p>
           </article>
           <article class="decision-card accent-blue">
-            <span>Receita da cesta 2+</span>
+            <span>Receita dos pedidos 2+ itens</span>
             <strong id="multiRevenueShare">-</strong>
             <p id="multiRevenueDetail">-</p>
           </article>
           <article class="decision-card accent-teal">
-            <span>Recompra (mesmo cliente)</span>
+            <span>Clientes que recompraram</span>
             <strong id="repeatCustomers">-</strong>
             <p id="repeatCustomersDetail">-</p>
           </article>
@@ -206,21 +233,30 @@
         <div class="overview-grid repurchase-grid">
           <article class="overview-panel emphasis-panel">
             <div class="panel-title">
-              <span>Produtos dentro da cesta 2+</span>
+              <div class="panel-title-copy">
+                <span>Produtos em pedidos 2+ itens</span>
+                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Mostra quais produtos aparecem com maior volume dentro de pedidos que tiveram 2 ou mais itens pagos no mesmo pedido. Serve para entender combinacoes, kits e produtos que puxam cesta maior.">i</button>
+              </div>
               <strong id="topMultiProductSignal">-</strong>
             </div>
             <div id="multiProductProductsMini" class="mini-list"></div>
           </article>
           <article class="overview-panel">
             <div class="panel-title">
-              <span>Linhas dentro da cesta 2+</span>
+              <div class="panel-title-copy">
+                <span>Linhas em pedidos 2+ itens</span>
+                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Agrupa os pedidos de 2+ itens por linha de produto. Ajuda a ver quais linhas aparecem mais em compras maiores e devem receber atencao em estoque, sugestao de combo e vitrine.">i</button>
+              </div>
               <strong id="topMultiLineSignal">-</strong>
             </div>
             <div id="multiProductLinesMini" class="mini-list"></div>
           </article>
           <article class="overview-panel">
             <div class="panel-title">
-              <span>Produtos comprados por recompradores</span>
+              <div class="panel-title-copy">
+                <span>Produtos comprados por recompradores</span>
+                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Mostra os produtos mais comprados por clientes que fizeram 2 ou mais pedidos pagos em novembro. Nao e a mesma coisa que cesta no mesmo pedido: aqui o foco e comportamento de retorno do cliente.">i</button>
+              </div>
               <strong id="topRepeatProductSignal">-</strong>
             </div>
             <div id="repeatProductsMini" class="mini-list"></div>
@@ -232,7 +268,10 @@
         <div class="heatmap-head">
           <div>
             <p class="eyebrow">Ritmo de vendas</p>
-            <h2>Heat map por semana, dia e horario</h2>
+            <div class="heading-with-tooltip">
+              <h2>Heat map por semana, dia e horario</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta analise mostra" data-tooltip="Mostra quando os pedidos pagos aconteceram por semana, dia e hora para planejar operacao e estoque.">i</button>
+            </div>
           </div>
           <div class="heatmap-control">
             <label for="heatmapWeekSelect">Semana</label>
@@ -264,7 +303,7 @@
         <button class="tab" type="button" data-tab="acessorios">3. Mochilas</button>
         <button class="tab" type="button" data-tab="valor">4. Valor</button>
         <button class="tab" type="button" data-tab="brindes">5. Brindes</button>
-        <button class="tab" type="button" data-tab="recompra">6. Cesta/Recompra</button>
+        <button class="tab" type="button" data-tab="recompra">6. Comportamento</button>
         <button class="tab" type="button" data-tab="heatmap">7. Heat map</button>
         <button class="tab" type="button" data-tab="auditoria">Auditoria</button>
       </nav>
@@ -273,7 +312,10 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Tópico 1</p>
-            <h2>Ranking de linhas mais vendidas</h2>
+            <div class="heading-with-tooltip">
+              <h2>Ranking de linhas mais vendidas</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Abra cada linha para ver os produtos e cores que compoem o volume vendido.">i</button>
+            </div>
           </div>
           <select id="lineLimit" class="row-limit" aria-label="Quantidade de linhas no ranking">
             <option value="10">Top 10</option>
@@ -287,7 +329,10 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Tópico 2</p>
-            <h2>Faixa de valor que mais vendeu</h2>
+            <div class="heading-with-tooltip">
+              <h2>Faixa de valor em R$</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Ordena as faixas por unidades vendidas e mostra o produto lider dentro de cada faixa.">i</button>
+            </div>
           </div>
         </div>
         <div id="bandCards" class="band-grid"></div>
@@ -298,7 +343,10 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Tópico 3</p>
-            <h2>Representatividade e volume de mochilas</h2>
+            <div class="heading-with-tooltip">
+              <h2>Representatividade e volume de mochilas</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Avalia o peso das mochilas no escopo principal e ranqueia os modelos da categoria.">i</button>
+            </div>
           </div>
         </div>
         <div id="accessoryCards" class="band-grid"></div>
@@ -324,7 +372,10 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Tópico 4</p>
-            <h2>Percentual de vendas por valor de produto</h2>
+            <div class="heading-with-tooltip">
+              <h2>Percentual de vendas por valor de produto</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Compara participacao de unidades e receita por faixa de preco em reais.">i</button>
+            </div>
           </div>
         </div>
         <div id="priceDistribution" class="table-wrap"></div>
@@ -334,7 +385,10 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Tópico 5</p>
-            <h2>Brindes oficiais: volume e percentual</h2>
+            <div class="heading-with-tooltip">
+              <h2>Brindes oficiais: volume e percentual</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Mostra a saida de brindes oficiais e o impacto em valor de tabela.">i</button>
+            </div>
           </div>
           <select id="giftLimit" class="row-limit" aria-label="Quantidade de brindes no ranking">
             <option value="6" selected>Todos os 6</option>
@@ -347,12 +401,15 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Tópico 6</p>
-            <h2>Cesta 2+ e recompra</h2>
+            <div class="heading-with-tooltip">
+              <h2>Comportamento de compra</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Detalha produtos e linhas em pedidos com 2+ itens pagos e produtos de clientes que recompraram.">i</button>
+            </div>
           </div>
         </div>
         <div class="split-grid">
           <div>
-            <h3>Produtos em pedidos com cesta 2+</h3>
+            <h3>Produtos em pedidos com 2+ itens</h3>
             <div id="multiProductProducts" class="table-wrap"></div>
           </div>
           <div>
@@ -360,7 +417,7 @@
             <div id="repeatCustomerProducts" class="table-wrap"></div>
           </div>
         </div>
-        <div class="detail-label">Linhas em pedidos com cesta 2+</div>
+        <div class="detail-label">Linhas em pedidos com 2+ itens</div>
         <div id="multiProductLines" class="table-wrap"></div>
       </section>
 
@@ -368,7 +425,10 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Topico 7</p>
-            <h2>Heat map de vendas por semana, dia e horario</h2>
+            <div class="heading-with-tooltip">
+              <h2>Heat map de vendas por semana, dia e horario</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Detalha pedidos, unidades e receita por hora dentro da semana escolhida.">i</button>
+            </div>
           </div>
         </div>
         <div id="heatmapTable" class="table-wrap"></div>
@@ -378,13 +438,16 @@
         <div class="section-head">
           <div>
             <p class="eyebrow">Auditoria</p>
-            <h2>Fonte, período e regra de classificação</h2>
+            <div class="heading-with-tooltip">
+              <h2>Fonte, período e regra de classificação</h2>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Registra fonte, periodo, escopo e regras usadas para auditar os numeros do dashboard.">i</button>
+            </div>
           </div>
         </div>
         <div id="auditGrid" class="audit-grid"></div>
       </section>
     </main>
 
-    <script src="assets/app.js?v=20260813-vercel-mobile-v1"></script>
+    <script src="assets/app.js?v=20260814-cards-tooltips-v2"></script>
   </body>
 </html>

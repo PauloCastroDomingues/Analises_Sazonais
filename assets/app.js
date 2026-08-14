@@ -132,12 +132,47 @@ function hydrate(rawData) {
       pctRevenue: ratio(row.revenue, scope.footwearRevenue),
     }));
 
+  const lineTotals = new Map(data.footwearLineRanking.map((row) => [row.line, row]));
+  const lineColorRows = (data.lineColorBreakdown || [])
+    .filter((row) => lineTotals.has(row.line))
+    .map((row) => {
+      const lineTotal = lineTotals.get(row.line);
+      return {
+        ...row,
+        pctLineUnits: ratio(row.units, lineTotal.units),
+        pctLineRevenue: ratio(row.revenue, lineTotal.revenue),
+        avgPrice: ratio(row.revenue, row.units),
+      };
+    });
+  const lineColorByLine = new Map();
+  lineColorRows.forEach((row) => {
+    const current = lineColorByLine.get(row.line) || [];
+    current.push(row);
+    lineColorByLine.set(row.line, current);
+  });
+  data.lineColorBreakdown = lineColorRows;
+  data.footwearLineRanking = data.footwearLineRanking.map((row) => ({
+    ...row,
+    colorRows: lineColorByLine.get(row.line) || [],
+  }));
+
+  const topProductByBand = new Map(
+    (data.priceBandTopProducts || []).map((row) => [
+      row.band,
+      {
+        ...row,
+        avgPrice: ratio(row.revenue, row.units),
+      },
+    ])
+  );
   data.valueBands = data.valueBands.map((row) => ({
     ...row,
     pctUnits: ratio(row.units, scope.paidUnits),
     pctRevenue: ratio(row.revenue, scope.paidRevenue),
     avgPrice: ratio(row.revenue, row.units),
+    topProduct: topProductByBand.get(row.band) || null,
   }));
+  data.priceBandTopProducts = data.valueBands.map((row) => row.topProduct).filter(Boolean);
 
   data.priceDistribution = [...data.valueBands].sort((a, b) => b.pctUnits - a.pctUnits);
 
@@ -298,8 +333,8 @@ function renderExecutiveBrief() {
   setText("briefBlackDayDetail", `${numberFmt.format(blackDayUnits)} unidades pagas no dia da Black.`);
   setText("briefLineSignal", topLine ? `${topLine.line} | ${percentFmt.format(topLine.pctUnits)}` : "-");
   setText("briefLineDetail", topLine ? `${numberFmt.format(topLine.units)} unidades | ${currencyFmt.format(topLine.revenue)}.` : "-");
-  setText("briefBandSignal", topBand ? `${topBand.band} | ${percentFmt.format(topBand.pctUnits)}` : "-");
-  setText("briefBandDetail", topBand ? `${numberFmt.format(topBand.units)} unidades analisadas | ticket ${currencyFmt.format(topBand.avgPrice)}.` : "-");
+  setText("briefBandSignal", topBand ? `${formatBandLabel(topBand.band)} | ${percentFmt.format(topBand.pctUnits)}` : "-");
+  setText("briefBandDetail", topBand ? `${numberFmt.format(topBand.units)} unidades | top: ${formatTopProduct(topBand.topProduct, 34)}.` : "-");
 }
 
 function renderKpis() {
@@ -348,7 +383,7 @@ function renderAnalysisBoard() {
   ];
 
   setText("mainLineSignal", topLine ? `${topLine.line} | ${percentFmt.format(topLine.pctUnits)}` : "-");
-  setText("mainBandSignal", topBand ? `${topBand.band} | ${percentFmt.format(topBand.pctUnits)}` : "-");
+  setText("mainBandSignal", topBand ? `${formatBandLabel(topBand.band)} | ${percentFmt.format(topBand.pctUnits)}` : "-");
   setText("mainAccessorySignal", `${numberFmt.format(data.coreAccessories.units)} unid. | ${percentFmt.format(data.coreAccessories.pctUnits)}`);
   setText("mainBackpackSignal", topBackpack ? `${numberFmt.format(topBackpack.units)} unid.` : "-");
   setText("mainValueShareSignal", topBand ? `${percentFmt.format(topBand.pctRevenue)} da receita` : "-");
@@ -361,10 +396,10 @@ function renderAnalysisBoard() {
   });
 
   renderCompactList("mainBandRanking", valueRowsWithTotal, {
-    name: (row) => row.band,
+    name: (row) => row.isTotal ? row.band : formatBandLabel(row.band),
     meta: (row) => row.isTotal
       ? `${numberFmt.format(row.units)} unid. | ${currencyFmt.format(row.revenue)} receita`
-      : `${numberFmt.format(row.units)} unid. | ${percentFmt.format(row.pctUnits)} volume analisado | ticket ${currencyFmt.format(row.avgPrice)}`,
+      : `${numberFmt.format(row.units)} unid. | ${percentFmt.format(row.pctUnits)} volume | top: ${formatTopProduct(row.topProduct, 26)}`,
     pct: (row) => row.pctUnits,
   });
 
@@ -383,7 +418,7 @@ function renderAnalysisBoard() {
   });
 
   renderCompactList("mainValueShare", valueRowsWithTotal, {
-    name: (row) => row.band,
+    name: (row) => row.isTotal ? row.band : formatBandLabel(row.band),
     meta: (row) => row.isTotal
       ? `${currencyFmt.format(row.revenue)} receita analisada | ${numberFmt.format(row.units)} unid.`
       : `${percentFmt.format(row.pctUnits)} das unidades | ${percentFmt.format(row.pctRevenue)} da receita`,
@@ -465,7 +500,7 @@ function renderOverview() {
   const top5GiftUnits = sum(data.giftRanking.slice(0, 5), "units");
 
   setText("overviewTopLine", `${topLine.line} | ${percentFmt.format(topLine.pctUnits)}`);
-  setText("overviewTopBand", `${topBand.band} | ${percentFmt.format(topBand.pctUnits)}`);
+  setText("overviewTopBand", `${formatBandLabel(topBand.band)} | ${percentFmt.format(topBand.pctUnits)}`);
   setText("overviewPurchaseSignal", `${percentFmt.format(ratio(top3LineUnits, data.analysisScope?.footwearUnits || data.totals.paidUnits))} no Top 3`);
   setText("overviewAccessoriesSignal", `${percentFmt.format(data.coreAccessories.pctUnits)} do volume analisado`);
   setText("overviewBackpackSignal", `${numberFmt.format(topBackpack.units)} unid. líder`);
@@ -478,8 +513,8 @@ function renderOverview() {
   });
 
   renderMiniList("overviewBands", data.valueBands, {
-    name: (row) => row.band,
-    detail: (row) => `${numberFmt.format(row.units)} unid. | ticket ${currencyFmt.format(row.avgPrice)}`,
+    name: (row) => formatBandLabel(row.band),
+    detail: (row) => `${numberFmt.format(row.units)} unid. | top: ${formatTopProduct(row.topProduct, 34)}`,
     pct: (row) => row.pctUnits,
   });
 
@@ -509,8 +544,8 @@ function renderOverview() {
     },
     {
       label: "Preço dominante",
-      value: topBand.band,
-      detail: `${percentFmt.format(topBand.pctUnits)} das unidades analisadas estão nessa faixa.`,
+      value: formatBandLabel(topBand.band),
+      detail: `${percentFmt.format(topBand.pctUnits)} das unidades analisadas; top: ${formatTopProduct(topBand.topProduct, 34)}.`,
     },
     {
       label: "Mochilas",
@@ -533,7 +568,7 @@ function renderRepurchaseTables() {
     column("Produto", "product", "name"),
     column("Linha", "line", "text"),
     column("Unidades", "units", "number"),
-    column("% cestas 2+", "pctMultiUnits", "bar"),
+    column("% pedidos 2+", "pctMultiUnits", "bar"),
     column("Receita", "revenue", "currency"),
     column("Preço médio", "avgPrice", "currency"),
   ]);
@@ -550,7 +585,7 @@ function renderRepurchaseTables() {
   renderTable("multiProductLines", repurchase.topMultiProductLines, [
     column("Linha", "line", "name"),
     column("Unidades", "units", "number"),
-    column("% cestas 2+", "pctMultiUnits", "bar"),
+    column("% pedidos 2+", "pctMultiUnits", "bar"),
     column("Receita", "revenue", "currency"),
     column("% receita", "pctMultiRevenue", "percent"),
     column("Preço médio", "avgPrice", "currency"),
@@ -687,10 +722,10 @@ function renderInsights() {
     "insightTopLineDetail",
     `${numberFmt.format(topLine.units)} unidades, ${percentFmt.format(topLine.pctUnits)} do volume de tênis.`
   );
-  setText("insightTopBand", topBand.band);
+  setText("insightTopBand", formatBandLabel(topBand.band));
   setText(
     "insightTopBandDetail",
-    `${numberFmt.format(topBand.units)} unidades, ${percentFmt.format(topBand.pctUnits)} do volume analisado.`
+    `${numberFmt.format(topBand.units)} unidades, ${percentFmt.format(topBand.pctUnits)} do volume analisado; top: ${formatTopProduct(topBand.topProduct, 36)}.`
   );
   setText("insightAccessories", percentFmt.format(data.coreAccessories.pctUnits));
   setText(
@@ -706,26 +741,21 @@ function renderInsights() {
 
 function renderLineRanking() {
   if (!state.data) return;
-  renderTable("lineRanking", state.data.footwearLineRanking.slice(0, state.limits.line), [
-    column("Linha", "line", "name"),
-    column("Unidades", "units", "number"),
-    column("% unidades", "pctUnits", "bar"),
-    column("Receita", "revenue", "currency"),
-    column("% receita", "pctRevenue", "percent"),
-    column("Preço médio", "avgPrice", "currency"),
-  ]);
+  renderLineDropdowns("lineRanking", state.data.footwearLineRanking.slice(0, state.limits.line));
 }
 
 function renderBandCards() {
   const rows = state.data.valueBands;
   document.getElementById("bandCards").innerHTML = rows
-    .map((row) => metricCard(row.band, numberFmt.format(row.units), `${percentFmt.format(row.pctUnits)} do volume analisado`, row.pctUnits))
+    .map((row) => metricCard(formatBandLabel(row.band), numberFmt.format(row.units), `${percentFmt.format(row.pctUnits)} do volume | top: ${formatTopProduct(row.topProduct, 34)}`, row.pctUnits))
     .join("");
 }
 
 function renderValueBands() {
   renderTable("valueBands", state.data.valueBands, [
-    column("Faixa", "band", "text"),
+    { label: "Faixa em R$", value: (row) => formatBandLabel(row.band), type: "text" },
+    { label: "Top 1 produto", value: (row) => row.topProduct?.product || "-", type: "name" },
+    { label: "Top unid.", value: (row) => row.topProduct?.units || 0, type: "number", align: "right" },
     column("Unidades", "units", "number"),
     column("% unidades", "pctUnits", "bar"),
     column("Receita", "revenue", "currency"),
@@ -766,7 +796,8 @@ function renderBackpackRanking() {
 
 function renderPriceDistribution() {
   renderTable("priceDistribution", state.data.priceDistribution, [
-    column("Valor do produto", "band", "text"),
+    { label: "Faixa em R$", value: (row) => formatBandLabel(row.band), type: "text" },
+    { label: "Top 1 produto", value: (row) => row.topProduct?.product || "-", type: "name" },
     column("Unidades", "units", "number"),
     column("% unidades", "pctUnits", "bar"),
     column("Receita", "revenue", "currency"),
@@ -889,6 +920,68 @@ function renderTakeaways(rows) {
       </div>
     `)
     .join("");
+}
+
+function renderLineDropdowns(id, rows) {
+  const container = document.getElementById(id);
+  if (!container) return;
+  container.classList.add("line-ranking-wrap");
+  if (!rows.length) {
+    container.innerHTML = '<div class="empty-table">Sem dados para este tópico.</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="line-dropdown-list">
+      ${rows
+        .map((row, index) => {
+          const colorRows = row.colorRows || [];
+          const topColor = colorRows[0];
+          const width = clamp((Number(row.pctUnits) || 0) * 100, 0, 100);
+          return `
+            <details class="line-dropdown" ${index === 0 ? "open" : ""}>
+              <summary>
+                <span class="line-summary-rank">${index + 1}</span>
+                <span class="line-summary-main">
+                  <strong>${escapeHtml(row.line)}</strong>
+                  <small>${numberFmt.format(row.units)} unid. | ${currencyFmt.format(row.revenue)} | ticket ${currencyFmt.format(row.avgPrice)}</small>
+                </span>
+                <span class="line-summary-signal">
+                  <span>${percentFmt.format(row.pctUnits)} do volume</span>
+                  <b style="width:${width}%"></b>
+                </span>
+                <span class="line-summary-top">${topColor ? `Top: ${escapeHtml(topColor.color)} | ${numberFmt.format(topColor.units)} unid.` : "Sem detalhe de cor"}</span>
+              </summary>
+              <div class="line-color-list">
+                ${colorRows.length
+                  ? colorRows.map((colorRow) => renderLineColorRow(colorRow)).join("")
+                  : '<div class="line-color-empty">Sem detalhe de produto/cor para esta linha.</div>'}
+              </div>
+            </details>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function renderLineColorRow(row) {
+  const width = clamp((Number(row.pctLineUnits) || 0) * 100, 0, 100);
+  const color = getSwatchColor(row.color);
+  return `
+    <div class="line-color-row">
+      <span class="color-swatch" style="--swatch-color:${color}"></span>
+      <span class="line-color-product">
+        <strong>${escapeHtml(row.product)}</strong>
+        <small>${escapeHtml(row.color || "Sem cor")} | ${currencyFmt.format(row.revenue)} | ticket ${currencyFmt.format(row.avgPrice)}</small>
+      </span>
+      <span class="line-color-units">${numberFmt.format(row.units)} unid.</span>
+      <span class="line-color-share">
+        <i><b style="width:${width}%"></b></i>
+        <em>${percentFmt.format(row.pctLineUnits)}</em>
+      </span>
+    </div>
+  `;
 }
 
 function renderTable(id, rows, columns) {
@@ -1084,6 +1177,46 @@ function isBlackFridayDate(value) {
 
 function formatHour(value) {
   return `${String(Number(value)).padStart(2, "0")}h`;
+}
+
+function formatBandLabel(band) {
+  const text = String(band || "-");
+  if (/^Abaixo de\s+(\d+)/i.test(text)) return text.replace(/^Abaixo de\s+(\d+)/i, "Abaixo de R$ $1");
+  if (/^Acima de\s+(\d+)/i.test(text)) return text.replace(/^Acima de\s+(\d+)/i, "Acima de R$ $1");
+  const match = text.match(/^(\d+)\s+a\s+(\d+)$/i);
+  return match ? `R$ ${match[1]} a R$ ${match[2]}` : text;
+}
+
+function formatTopProduct(row, maxLength = 32) {
+  if (!row) return "sem produto";
+  return `${shortText(row.product, maxLength)} (${numberFmt.format(row.units)} unid.)`;
+}
+
+function getSwatchColor(value) {
+  const key = normalizeText(value);
+  const colors = {
+    "all black": "#050505",
+    "azul-marinho": "#17375e",
+    branco: "#f1eee5",
+    camurca: "#c39a5e",
+    cinza: "#858883",
+    marrom: "#7a5035",
+    offwhite: "#ebe3d1",
+    "off white": "#ebe3d1",
+    oliva: "#66724a",
+    preto: "#111111",
+    verde: "#496a43",
+    "sem cor": "#767872",
+  };
+  return colors[key] || "#8b8d87";
+}
+
+function normalizeText(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
 }
 
 function getTopHeatmapHour(rows) {

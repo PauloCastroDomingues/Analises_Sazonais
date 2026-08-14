@@ -2,7 +2,7 @@
 
 Este README e a nota principal para qualquer novo chat/agente continuar o trabalho sem perder o fio da meada.
 
-Ultima atualizacao operacional: `2026-08-13`.
+Ultima atualizacao operacional: `2026-08-14`.
 
 ## Objetivo
 
@@ -11,14 +11,14 @@ Construir um dashboard local para estudar o comportamento de vendas da Black de 
 O dashboard precisa responder, de forma objetiva e visual, estes 5 pontos principais e as extensoes executivas adicionadas no projeto:
 
 1. Ranking de linhas mais vendidas, com foco em linhas como `RS6`, `RS7`, `RS Knit`, `911`, etc.
-2. Faixa de valor que mais vendeu, incluindo `400 a 500`, `500 a 600`, `600 a 700` e demais faixas.
+2. Faixa de valor em reais que mais vendeu, incluindo top 1 produto de cada faixa.
 3. Representatividade e volume de acessorios, com `Mochilas` em destaque e ranking proprio.
 4. Percentual de vendas por valor de produto.
 5. Brindes que mais sairam, com volume, percentual e valor de tabela.
 
 Extensoes executivas atuais:
 
-- Cesta 2+ e recompra dentro de novembro/2025.
+- Comportamento de compra: pedidos com 2+ itens e recompra dentro de novembro/2025.
 - Heat map de vendas por semana, dia e horario.
 
 ## Estado atual
@@ -35,9 +35,24 @@ Tela atual:
 - Primeira tela com 6 cards alinhados em grade `3 x 2`.
 - Cada card da analise principal tem a mesma estrutura e 6 linhas uteis para evitar espacos vazios.
 - Abas de detalhamento continuam abaixo da analise principal.
-- Cache busting atual em `index.html`: `assets/styles.css?v=20260813-vercel-mobile-v1` e `assets/app.js?v=20260813-vercel-mobile-v1`.
-- Abaixo dos 6 cards principais existe uma seção executiva de `Cesta 2+ e recompra`.
-- Abaixo de `Cesta 2+ e recompra` existe uma secao executiva de `Heat map por semana, dia e horario`.
+- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-cards-tooltips-v2` e `assets/app.js?v=20260814-cards-tooltips-v2`.
+- Abaixo dos 6 cards principais existe uma secao executiva de `Comportamento de compra`.
+- Abaixo de `Comportamento de compra` existe uma secao executiva de `Heat map por semana, dia e horario`.
+
+## Atualizacao de 2026-08-14 - Tooltips, faixas em reais e dropdown de cores
+
+Motivo da revisao: o usuario pediu renomear o bloco de cesta/recompra, deixar claro que faixa de valor e em reais, incluir top 1 produto de cada faixa e abrir as cores/produtos dentro de cada linha vendida.
+
+O que foi ajustado:
+
+- `Cesta 2+ e recompra` passou a ser apresentado como `Comportamento de compra`.
+- Faixas de valor passaram a aparecer como faixas em `R$`.
+- `data/black_nov_2025_dashboard.json` ganhou `priceBandTopProducts` com o top 1 produto de cada faixa.
+- `data/black_nov_2025_dashboard.json` ganhou `lineColorBreakdown` com produto, cor, unidades e receita por linha.
+- Ranking de linhas no detalhamento virou dropdown por linha, mostrando produtos e cores.
+- Tooltips adicionados aos principais cabecalhos e cards de analise.
+- Cards de `Produtos em pedidos 2+ itens`, `Linhas em pedidos 2+ itens` e `Produtos comprados por recompradores` foram alinhados e ganharam tooltips explicativos.
+- Cache dos assets atualizado para `20260814-cards-tooltips-v2`.
 
 ## Atualizacao de 2026-08-13 - Publicacao GitHub e Vercel
 
@@ -51,8 +66,8 @@ O que foi ajustado:
 - GitHub conectado ao projeto Vercel para proximos deploys automaticos.
 - Deploy de producao validado em `https://analises-sazonais.vercel.app`.
 - `reise-ssot-bq`, screenshots locais e arquivos `.env*` ficam ignorados e fora do deploy.
-- Ajuste mobile no resumo executivo para evitar overflow horizontal no deploy publico.
-- Cache dos assets atualizado para `20260813-vercel-mobile-v1`.
+- Ajuste mobile no resumo executivo e nos contêineres principais para evitar overflow horizontal no deploy publico, incluindo scrollbar headless.
+- Cache dos assets atualizado para `20260813-vercel-mobile-v3`.
 
 ## Atualizacao de 2026-08-13 - Apresentacao visual v2
 
@@ -228,7 +243,7 @@ Importante:
 Ponto crítico para próximos chats: não misturar os denominadores.
 
 - `11.267` = pedidos totais da base em novembro de 2025.
-- `11.249` = pedidos com pelo menos 1 item pago. Esta é a base usada em `Cesta 2+ e recompra`.
+- `11.249` = pedidos com pelo menos 1 item pago. Esta é a base usada em `Comportamento de compra`.
 - Diferença: `18` pedidos aparecem na base total, mas não entram na cesta paga porque não têm item pago válido para essa análise.
 - `Cesta 2+` = mesmo pedido com 2 ou mais itens/produtos pagos.
 - `Recompra` = mesmo `customer_sk` com 2 ou mais pedidos pagos dentro de `2025-11-01` a `2025-11-30`.
@@ -301,7 +316,7 @@ Top brindes oficiais:
 - `Necessaire`: `215` unidades, `14,5%`.
 - `Sneaker Bag`: `66` unidades, `4,5%`.
 
-### 6. Cesta 2+ e recompra
+### 6. Comportamento de compra
 
 Leitura executiva:
 
@@ -312,7 +327,7 @@ Leitura executiva:
 - Recompradores fizeram `1.610` pedidos, `14,3%` dos pedidos pagos.
 - Recompradores geraram `R$ 747.124,93`, `13,5%` da receita paga.
 
-Produtos que mais aparecem em pedidos com cesta 2+:
+Produtos que mais aparecem em pedidos com 2+ itens:
 
 - As listas exibidas no dashboard foram filtradas para nao mostrar produtos fora do escopo principal.
 - Exibir apenas linhas/produtos de `Tenis` e `Mochilas`.
@@ -447,5 +462,5 @@ Se o usuario abrir um chat novo, pode colar:
 
 ```text
 Estamos no projeto C:\Users\reise\OneDrive\Area de Trabalho\DADOS\Black -analise 2025-2026.
-Leia o README.md primeiro. E um dashboard local da Black 2025 para forecast de compras, usando data/black_nov_2025_dashboard.json vindo da planilha BASE_BLACK_2025. Preserve os 5 blocos principais com escopo principal somente de Tenis + Mochilas + Brindes oficiais; acessorio nesta analise significa apenas Mochilas. Vestuario, Acessorios pagos, Oculos, Chinelo e Sandalias e Outros ficam fora da analise principal. Ha tambem secoes executivas de Cesta 2+ e recompra e de Heat map semana x dia x horario. Nao misture os denominadores: 11.267 e pedido total da base; 14.025 e unidade analisada no escopo principal; 11.249 e pedido com item pago usado nas extensoes de comportamento quando nao recalculadas. Brindes oficiais sao somente Relógio, Sneaker Bag, Case de notebook, Óculos Suzuka, Necessaire e Deskpad. O heat map usa semanas fixas de novembro: 1=01-07, 2=08-14, 3=15-21, 4=22-30, com dias nas linhas, 00h-23h nas colunas e coluna Total no canto direito em hora local Sao Paulo. Mostrar apenas um grafico por vez no heat map, controlado pelo seletor Semana. Se atualizar o CSV, rodar `node scripts\build_heatmap_day_hour.js`; se alterar escopo, rodar `node scripts\apply_scope_tenis_mochilas.js`. Rodar em http://127.0.0.1:8000/index.html e validar visualmente antes de responder.
+Leia o README.md primeiro. E um dashboard local da Black 2025 para forecast de compras, usando data/black_nov_2025_dashboard.json vindo da planilha BASE_BLACK_2025. Preserve os 5 blocos principais com escopo principal somente de Tenis + Mochilas + Brindes oficiais; acessorio nesta analise significa apenas Mochilas. Vestuario, Acessorios pagos, Oculos, Chinelo e Sandalias e Outros ficam fora da analise principal. Ha tambem secoes executivas de Comportamento de compra e de Heat map semana x dia x horario. Nao misture os denominadores: 11.267 e pedido total da base; 14.025 e unidade analisada no escopo principal; 11.249 e pedido com item pago usado nas extensoes de comportamento quando nao recalculadas. Brindes oficiais sao somente Relógio, Sneaker Bag, Case de notebook, Óculos Suzuka, Necessaire e Deskpad. O heat map usa semanas fixas de novembro: 1=01-07, 2=08-14, 3=15-21, 4=22-30, com dias nas linhas, 00h-23h nas colunas e coluna Total no canto direito em hora local Sao Paulo. Mostrar apenas um grafico por vez no heat map, controlado pelo seletor Semana. Se atualizar o CSV, rodar `node scripts\build_heatmap_day_hour.js`; se alterar escopo, rodar `node scripts\apply_scope_tenis_mochilas.js`. Rodar em http://127.0.0.1:8000/index.html e validar visualmente antes de responder.
 ```
