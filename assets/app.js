@@ -209,6 +209,7 @@ function hydrate(rawData) {
   if (data.repurchaseAnalysis) {
     const repurchase = data.repurchaseAnalysis;
     const repurchaseTotals = repurchase.totals;
+    repurchaseTotals.avgProductsPerPaidOrder = repurchaseTotals.avgProductsPerPaidOrder || ratio(totals.paidUnits, repurchaseTotals.paidOrders);
 
     repurchase.topMultiProductProducts = repurchase.topMultiProductProducts.filter((row) => isScopedLine(row.line));
     const multiProductUnits = sum(repurchase.topMultiProductProducts, "units");
@@ -292,6 +293,7 @@ function render() {
   renderKpis();
   renderAnalysisBoard();
   renderRepurchaseBoard();
+  renderExpandedRecurrence();
   renderLineRanking();
   renderBandCards();
   renderValueBands();
@@ -443,7 +445,7 @@ function renderRepurchaseBoard() {
 
   setText(
     "repurchaseBaseNote",
-    `Base: ${numberFmt.format(totals.paidOrders)} pedidos pagos e ${numberFmt.format(totals.paidCustomers)} clientes pagos; exclui brindes e itens zerados.`
+    `Base: ${numberFmt.format(totals.paidOrders)} pedidos pagos e ${numberFmt.format(totals.paidCustomers)} clientes pagos; mede novembro, sem recorrência histórica.`
   );
   setText("multiOrderShare", percentFmt.format(totals.multiProductOrderShare));
   setText(
@@ -453,17 +455,22 @@ function renderRepurchaseBoard() {
   setText("multiRevenueShare", percentFmt.format(totals.multiProductRevenueShare));
   setText(
     "multiRevenueDetail",
-    `${compactCurrencyFmt.format(totals.multiProductRevenue)} de ${compactCurrencyFmt.format(state.data.totals.paidRevenue)} pagos | ${decimalFmt.format(totals.avgUnitsPerMultiProductOrder)} itens/pedido.`
+    `${compactCurrencyFmt.format(totals.multiProductRevenue)} de ${compactCurrencyFmt.format(state.data.totals.paidRevenue)} pagos | média só desses pedidos: ${decimalFmt.format(totals.avgUnitsPerMultiProductOrder)} itens.`
   );
   setText("repeatCustomers", numberFmt.format(totals.repeatCustomers));
   setText(
     "repeatCustomersDetail",
-    `${numberFmt.format(totals.repeatCustomers)} de ${numberFmt.format(totals.paidCustomers)} clientes pagos no mês.`
+    `${percentFmt.format(totals.repeatCustomerShare)} dos clientes pagos fizeram 2+ pedidos na Black.`
   );
   setText("repeatOrderShare", percentFmt.format(totals.repeatOrderShare));
   setText(
     "repeatOrderDetail",
-    `${numberFmt.format(totals.repeatOrders)} pedidos de clientes recorrentes | ${compactCurrencyFmt.format(totals.repeatRevenue)}.`
+    `${numberFmt.format(totals.repeatOrders)} pedidos desses clientes | ${compactCurrencyFmt.format(totals.repeatRevenue)}.`
+  );
+  setText("avgCartAllBlack", `${decimalFmt.format(totals.avgProductsPerPaidOrder)} itens`);
+  setText(
+    "avgCartAllBlackDetail",
+    `${numberFmt.format(state.data.totals.paidUnits)} itens pagos / ${numberFmt.format(totals.paidOrders)} pedidos pagos.`
   );
 
   setText("topMultiProductSignal", topMultiProduct ? `${numberFmt.format(topMultiProduct.units)} unid.` : "-");
@@ -487,6 +494,67 @@ function renderRepurchaseBoard() {
     detail: (row) => `${row.line} | ${currencyFmt.format(row.revenue)}`,
     pct: (row) => row.pctRepeatUnits,
   });
+}
+
+function renderExpandedRecurrence() {
+  const recurrence = state.data.recurrenceExpanded;
+  const container = document.getElementById("recurrenceExpandedCards");
+  if (!recurrence || !container) return;
+
+  const periods = recurrence.periods || [];
+  const maxRepeatRate = Math.max(...periods.map((row) => Number(row.repeatCustomerRate) || 0), 0.01);
+  const black = periods.find((row) => row.key === "black");
+  const after = periods.find((row) => row.key === "after_3m");
+  const deltaAfterBlack = after && black ? after.repeatCustomerRate - black.repeatCustomerRate : 0;
+  const direction = deltaAfterBlack >= 0 ? "acima" : "abaixo";
+
+  setText(
+    "recurrenceExpandedInsight",
+    after && black
+      ? `Depois da Black, a recorrência agregada ficou ${decimalFmt.format(Math.abs(deltaAfterBlack) * 100)} p.p. ${direction} de novembro; isso ainda não prova retorno da coorte nova.`
+      : recurrence.insights?.[0] || "Comparação agregada entre antes, Black e depois."
+  );
+  setText(
+    "recurrenceExpandedNote",
+    "Leitura agregada: para medir cashback, precisa cruzar os clientes novos da Black contra os pedidos de dezembro, janeiro e fevereiro em uma base unificada."
+  );
+
+  container.innerHTML = periods
+    .map((row) => {
+      const repeatRate = Number(row.repeatCustomerRate) || 0;
+      const width = clamp((repeatRate / maxRepeatRate) * 100, 2, 100);
+      const isBlack = row.key === "black";
+      const title = isBlack ? "Clientes que compraram 2+ vezes na Black" : "Clientes com 2+ pedidos no período";
+      const range = `${formatDate(row.start)} a ${formatDate(row.end)}`;
+
+      return `
+        <article class="recurrence-card${isBlack ? " is-black" : ""}">
+          <div class="recurrence-card-head">
+            <span>${escapeHtml(row.label)}</span>
+            <small>${escapeHtml(range)}</small>
+          </div>
+          <strong>${percentFmt.format(repeatRate)}</strong>
+          <div class="recurrence-bar" aria-hidden="true">
+            <span style="width: ${width}%"></span>
+          </div>
+          <dl>
+            <div>
+              <dt>${escapeHtml(title)}</dt>
+              <dd>${numberFmt.format(row.repeatCustomers)} de ${numberFmt.format(row.customers)}</dd>
+            </div>
+            <div>
+              <dt>Pedidos desses clientes</dt>
+              <dd>${numberFmt.format(row.repeatOrders)} (${percentFmt.format(row.repeatOrderShare)})</dd>
+            </div>
+            <div>
+              <dt>Carrinho médio geral</dt>
+              <dd>${decimalFmt.format(row.avgProductsPerOrder)} itens/pedido</dd>
+            </div>
+          </dl>
+        </article>
+      `;
+    })
+    .join("");
 }
 
 function renderOverview() {
@@ -577,7 +645,7 @@ function renderRepurchaseTables() {
     column("Produto", "product", "name"),
     column("Linha", "line", "text"),
     column("Unidades", "units", "number"),
-    column("% recompradores", "pctRepeatUnits", "bar"),
+    column("% clientes Black 2+", "pctRepeatUnits", "bar"),
     column("Receita", "revenue", "currency"),
     column("Preço médio", "avgPrice", "currency"),
   ]);
@@ -846,7 +914,7 @@ function renderAudit() {
     { label: "Sem SKU", value: numberFmt.format(totals.missingSkuRows), detail: "Mantidos no cálculo pelo nome do produto" },
     { label: "Regra de brinde", value: "Lista oficial", detail: "Relógio, Sneaker Bag, Case, Óculos Suzuka, Necessaire e Deskpad" },
     ...(repurchaseTotals
-      ? [{ label: "Base de cesta/recompra", value: `${numberFmt.format(repurchaseTotals.paidOrders)} pedidos pagos`, detail: "Exclui brindes e itens zerados/descontados" }]
+      ? [{ label: "Base de comportamento Black", value: `${numberFmt.format(repurchaseTotals.paidOrders)} pedidos pagos`, detail: "Cesta e clientes 2+ pedidos usam itens pagos de novembro" }]
       : []),
     ...(heatmapTotals
       ? [{ label: "Base do heat map", value: `${numberFmt.format(heatmapTotals.orders)} pedidos pagos`, detail: "heatmap_calc | 30 dias x 24 horas por semana" }]

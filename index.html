@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard Black 2025 - Reise</title>
-    <link rel="stylesheet" href="assets/styles.css?v=20260814-cards-tooltips-v2">
+    <link rel="stylesheet" href="assets/styles.css?v=20260814-recorrencia-v1">
   </head>
   <body>
     <header class="topbar">
@@ -195,15 +195,15 @@
             <p class="eyebrow">Comportamento de compra</p>
             <div class="heading-with-tooltip">
               <h2>Comportamento de compra</h2>
-              <button class="info-tooltip" type="button" aria-label="O que esta analise mostra" data-tooltip="Mede pedidos com 2 ou mais itens pagos e clientes que voltaram a comprar durante novembro.">i</button>
+              <button class="info-tooltip" type="button" aria-label="O que esta analise mostra" data-tooltip="Mede carrinho com 2+ itens, média geral de itens por pedido e clientes que fizeram mais de um pedido pago dentro da Black.">i</button>
             </div>
           </div>
-          <p>Pedidos com 2+ itens pagos e clientes com 2+ pedidos no mês.</p>
+          <p>Pedidos com 2+ itens pagos e clientes com 2+ pedidos no mês da Black.</p>
         </div>
 
-        <div class="definition-strip" aria-label="Definições da análise de cesta e recompra">
+        <div class="definition-strip" aria-label="Definições da análise de comportamento de compra">
           <span><strong>Cesta 2+</strong> mesmo pedido com 2 ou mais itens pagos.</span>
-          <span><strong>Recompra</strong> mesmo cliente com 2 ou mais pedidos pagos em novembro.</span>
+          <span><strong>Mais de uma vez na Black</strong> mesmo cliente com 2 ou mais pedidos pagos em novembro.</span>
           <span id="repurchaseBaseNote"><strong>Base</strong> -</span>
         </div>
 
@@ -219,14 +219,19 @@
             <p id="multiRevenueDetail">-</p>
           </article>
           <article class="decision-card accent-teal">
-            <span>Clientes que recompraram</span>
+            <span>Clientes que compraram mais de uma vez na Black</span>
             <strong id="repeatCustomers">-</strong>
             <p id="repeatCustomersDetail">-</p>
           </article>
           <article class="decision-card accent-rose">
-            <span>Pedidos de clientes recorrentes</span>
+            <span>Pedidos desses clientes</span>
             <strong id="repeatOrderShare">-</strong>
             <p id="repeatOrderDetail">-</p>
+          </article>
+          <article class="decision-card accent-blue">
+            <span>Média geral de carrinho</span>
+            <strong id="avgCartAllBlack">-</strong>
+            <p id="avgCartAllBlackDetail">-</p>
           </article>
         </div>
 
@@ -235,7 +240,7 @@
             <div class="panel-title">
               <div class="panel-title-copy">
                 <span>Produtos em pedidos 2+ itens</span>
-                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Mostra quais produtos aparecem com maior volume dentro de pedidos que tiveram 2 ou mais itens pagos no mesmo pedido. Serve para entender combinacoes, kits e produtos que puxam cesta maior.">i</button>
+                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Lista produtos específicos vendidos dentro de pedidos com 2 ou mais itens pagos. Não é duplicado com linhas: aqui a leitura é por produto/SKU para ver itens que puxam combos e cesta maior.">i</button>
               </div>
               <strong id="topMultiProductSignal">-</strong>
             </div>
@@ -245,7 +250,7 @@
             <div class="panel-title">
               <div class="panel-title-copy">
                 <span>Linhas em pedidos 2+ itens</span>
-                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Agrupa os pedidos de 2+ itens por linha de produto. Ajuda a ver quais linhas aparecem mais em compras maiores e devem receber atencao em estoque, sugestao de combo e vitrine.">i</button>
+                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Agrupa os mesmos pedidos 2+ por linha comercial, como RS6, RS7 e RS8. É uma visão de categoria/linha, diferente do card de produtos específicos.">i</button>
               </div>
               <strong id="topMultiLineSignal">-</strong>
             </div>
@@ -254,13 +259,28 @@
           <article class="overview-panel">
             <div class="panel-title">
               <div class="panel-title-copy">
-                <span>Produtos comprados por recompradores</span>
-                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Mostra os produtos mais comprados por clientes que fizeram 2 ou mais pedidos pagos em novembro. Nao e a mesma coisa que cesta no mesmo pedido: aqui o foco e comportamento de retorno do cliente.">i</button>
+                <span>Produtos de clientes que compraram mais de uma vez na Black</span>
+                <button class="info-tooltip" type="button" aria-label="O que este card mostra" data-tooltip="Mostra produtos comprados por clientes que fizeram 2 ou mais pedidos pagos durante novembro. Não mede recorrência histórica; mede retorno dentro da própria Black.">i</button>
               </div>
               <strong id="topRepeatProductSignal">-</strong>
             </div>
             <div id="repeatProductsMini" class="mini-list"></div>
           </article>
+        </div>
+
+        <div class="recurrence-expanded" aria-label="Recorrência antes, Black e depois">
+          <div class="recurrence-head">
+            <div>
+              <p class="eyebrow">Recorrência expandida</p>
+              <div class="heading-with-tooltip">
+                <h3>Antes x Black x depois</h3>
+                <button class="info-tooltip" type="button" aria-label="O que esta comparação mostra" data-tooltip="Compara, em cada janela, quantos clientes fizeram 2 ou mais pedidos. A leitura é agregada por período; para provar se os novos clientes da Black voltaram por cashback, precisa cruzar os mesmos customer_sk no pós-Black.">i</button>
+              </div>
+            </div>
+            <p id="recurrenceExpandedInsight">-</p>
+          </div>
+          <div id="recurrenceExpandedCards" class="recurrence-grid"></div>
+          <p id="recurrenceExpandedNote" class="recurrence-note">-</p>
         </div>
       </section>
 
@@ -403,7 +423,7 @@
             <p class="eyebrow">Tópico 6</p>
             <div class="heading-with-tooltip">
               <h2>Comportamento de compra</h2>
-              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Detalha produtos e linhas em pedidos com 2+ itens pagos e produtos de clientes que recompraram.">i</button>
+              <button class="info-tooltip" type="button" aria-label="O que esta secao mostra" data-tooltip="Detalha produtos e linhas em pedidos com 2+ itens pagos e produtos de clientes que compraram mais de uma vez dentro da Black.">i</button>
             </div>
           </div>
         </div>
@@ -413,7 +433,7 @@
             <div id="multiProductProducts" class="table-wrap"></div>
           </div>
           <div>
-            <h3>Produtos de clientes que recompraram</h3>
+            <h3>Produtos de clientes que compraram mais de uma vez na Black</h3>
             <div id="repeatCustomerProducts" class="table-wrap"></div>
           </div>
         </div>
@@ -448,6 +468,6 @@
       </section>
     </main>
 
-    <script src="assets/app.js?v=20260814-cards-tooltips-v2"></script>
+    <script src="assets/app.js?v=20260814-recorrencia-v1"></script>
   </body>
 </html>

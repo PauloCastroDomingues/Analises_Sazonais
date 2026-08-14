@@ -378,6 +378,7 @@ code {
 .band-grid,
 .audit-grid,
 .overview-grid,
+.recurrence-grid,
 .heatmap-summary {
   display: grid;
   gap: 18px;
@@ -389,7 +390,7 @@ code {
 
 .decision-grid {
   margin-top: 0;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .one-glance {
@@ -825,6 +826,148 @@ code {
   margin-top: 18px;
   grid-auto-rows: 1fr;
   align-items: stretch;
+}
+
+.recurrence-expanded {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.085);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(42, 188, 177, 0.065), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.038), rgba(255, 255, 255, 0.012)),
+    #20211e;
+  box-shadow: var(--shadow-soft);
+}
+
+.recurrence-head {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(280px, 1.2fr);
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.recurrence-head h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.recurrence-head > p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.recurrence-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.recurrence-card {
+  min-height: 250px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.028);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.recurrence-card.is-black {
+  border-color: rgba(244, 122, 28, 0.48);
+  background:
+    linear-gradient(180deg, rgba(244, 122, 28, 0.07), rgba(255, 255, 255, 0.014)),
+    #23231f;
+}
+
+.recurrence-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.recurrence-card-head span {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 850;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.recurrence-card-head small {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 750;
+  line-height: 1.25;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.recurrence-card strong {
+  color: #ffffff;
+  font-size: clamp(1.8rem, 2.4vw, 2.3rem);
+  line-height: 1;
+  font-weight: 900;
+}
+
+.recurrence-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.recurrence-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+}
+
+.recurrence-card.is-black .recurrence-bar span {
+  background: linear-gradient(90deg, var(--orange), var(--gold));
+}
+
+.recurrence-card dl {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.recurrence-card dl div {
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+.recurrence-card dt {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.recurrence-card dd {
+  margin: 4px 0 0;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.recurrence-note {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .analysis-grid {
@@ -2034,8 +2177,14 @@ th {
   .analysis-grid,
   .brief-grid,
   .heatmap-summary,
+  .recurrence-grid,
   .definition-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .recurrence-head {
+    grid-template-columns: 1fr;
+    align-items: start;
   }
 
   .executive-brief {
@@ -2108,6 +2257,7 @@ th {
   .analysis-grid,
   .brief-grid,
   .heatmap-summary,
+  .recurrence-grid,
   .definition-strip {
     grid-template-columns: 1fr;
   }
@@ -2122,6 +2272,7 @@ th {
   .audit-card,
   .brief-card,
   .heatmap-card,
+  .recurrence-card,
   .overview-panel,
   .analysis-card {
     min-height: auto;

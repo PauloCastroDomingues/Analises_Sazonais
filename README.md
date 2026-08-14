@@ -18,7 +18,8 @@ O dashboard precisa responder, de forma objetiva e visual, estes 5 pontos princi
 
 Extensoes executivas atuais:
 
-- Comportamento de compra: pedidos com 2+ itens e recompra dentro de novembro/2025.
+- Comportamento de compra: pedidos com 2+ itens e clientes que compraram mais de uma vez na Black.
+- Recorrencia expandida: comparacao agregada de 3 meses antes, Black e 3 meses depois.
 - Heat map de vendas por semana, dia e horario.
 
 ## Estado atual
@@ -35,9 +36,25 @@ Tela atual:
 - Primeira tela com 6 cards alinhados em grade `3 x 2`.
 - Cada card da analise principal tem a mesma estrutura e 6 linhas uteis para evitar espacos vazios.
 - Abas de detalhamento continuam abaixo da analise principal.
-- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-cards-tooltips-v2` e `assets/app.js?v=20260814-cards-tooltips-v2`.
+- Cache busting atual em `index.html`: `assets/styles.css?v=20260814-recorrencia-v1` e `assets/app.js?v=20260814-recorrencia-v1`.
 - Abaixo dos 6 cards principais existe uma secao executiva de `Comportamento de compra`.
 - Abaixo de `Comportamento de compra` existe uma secao executiva de `Heat map por semana, dia e horario`.
+
+## Atualizacao de 2026-08-14 - Recorrencia expandida e media geral de carrinho
+
+Motivo da revisao: o usuario trouxe duas planilhas extras, uma com 3 meses antes da Black e outra com 3 meses depois, e pediu para separar a leitura de compra repetida dentro da Black da recorrencia historica.
+
+O que foi ajustado:
+
+- Onde a analise fala de novembro, `recompra` passou a ser descrita como `clientes que compraram mais de uma vez na Black`.
+- `data/black_nov_2025_dashboard.json` ganhou `avgProductsPerPaidOrder`: `1,56` item por pedido pago na Black toda.
+- O card de `Media geral de carrinho` foi adicionado ao bloco de comportamento de compra.
+- O dashboard ganhou `Recorrencia expandida`, comparando:
+  - 3 meses antes: `997` de `10.404` clientes com 2+ pedidos, taxa `9,6%`.
+  - Black 2025: `743` de `10.383` clientes com 2+ pedidos, taxa `7,2%`.
+  - 3 meses depois: `801` de `8.911` clientes com 2+ pedidos, taxa `9,0%`.
+- Observacao metodologica: essa comparacao e agregada por periodo. Para provar se os 86% de clientes novos da Black voltaram para usar cashback em dezembro/janeiro, ainda precisa cruzar os mesmos `customer_sk` da Black contra a base pos-Black.
+- Cache dos assets atualizado para `20260814-recorrencia-v1`.
 
 ## Atualizacao de 2026-08-14 - Tooltips, faixas em reais e dropdown de cores
 
@@ -51,7 +68,7 @@ O que foi ajustado:
 - `data/black_nov_2025_dashboard.json` ganhou `lineColorBreakdown` com produto, cor, unidades e receita por linha.
 - Ranking de linhas no detalhamento virou dropdown por linha, mostrando produtos e cores.
 - Tooltips adicionados aos principais cabecalhos e cards de analise.
-- Cards de `Produtos em pedidos 2+ itens`, `Linhas em pedidos 2+ itens` e `Produtos comprados por recompradores` foram alinhados e ganharam tooltips explicativos.
+- Cards de `Produtos em pedidos 2+ itens`, `Linhas em pedidos 2+ itens` e `Produtos de clientes que compraram mais de uma vez na Black` foram alinhados e ganharam tooltips explicativos.
 - Cache dos assets atualizado para `20260814-cards-tooltips-v2`.
 
 ## Atualizacao de 2026-08-13 - Publicacao GitHub e Vercel
@@ -227,12 +244,13 @@ Importante:
 - Linhas classificadas como `Outros`: `1.018`
 - Linhas sem SKU: `5`
 - Pedidos pagos usados na analise de cesta: `11.249`
+- Media geral de carrinho na Black: `1,56` item pago por pedido pago.
 - Pedidos pagos com cesta 2+: `3.583`, `31,9%`
 - Receita em pedidos pagos com cesta 2+: `R$ 2.827.893,32`, `50,9%`
 - Clientes pagos no periodo: `10.383`
-- Clientes que recompraram dentro de novembro: `743`, `7,2%`
-- Pedidos de recompradores: `1.610`, `14,3%`
-- Receita de recompradores: `R$ 747.124,93`, `13,5%`
+- Clientes que compraram mais de uma vez na Black: `743`, `7,2%`
+- Pedidos desses clientes: `1.610`, `14,3%`
+- Receita desses clientes: `R$ 747.124,93`, `13,5%`
 - Heat map: `720` celulas, sendo `30` dias x `24` horas, separadas visualmente por semana.
 - Semana mais forte no heat map: `Semana 4`, `5.849` pedidos pagos, `52,0%`.
 - Horario lider agregado no heat map: `20h`, `1.013` pedidos pagos no mes.
@@ -322,10 +340,11 @@ Leitura executiva:
 
 - `3.583` pedidos pagos tiveram cesta 2+, `31,9%` dos pedidos pagos.
 - Esses pedidos concentraram `R$ 2.827.893,32`, `50,9%` da receita paga.
-- A cesta 2+ teve media de `2,7` itens pagos por pedido.
-- `743` clientes recompraram dentro de novembro, `7,2%` dos clientes pagos.
-- Recompradores fizeram `1.610` pedidos, `14,3%` dos pedidos pagos.
-- Recompradores geraram `R$ 747.124,93`, `13,5%` da receita paga.
+- A Black toda teve media geral de `1,56` item pago por pedido pago.
+- A cesta 2+ teve media de `2,7` itens pagos apenas dentro dos pedidos com 2+ itens.
+- `743` clientes compraram mais de uma vez na Black, `7,2%` dos clientes pagos.
+- Esses clientes fizeram `1.610` pedidos, `14,3%` dos pedidos pagos.
+- Esses clientes geraram `R$ 747.124,93`, `13,5%` da receita paga.
 
 Produtos que mais aparecem em pedidos com 2+ itens:
 

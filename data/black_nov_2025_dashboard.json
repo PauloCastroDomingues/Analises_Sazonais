@@ -20,7 +20,7 @@
       "Itens pagos excluem linhas classificadas como brinde oficial.",
       "Brindes oficiais ajustados pela lista validada pelo usuario: Relógio, Sneaker Bag, Case de notebook, Óculos Suzuka, Necessaire e Deskpad.",
       "Itens com desconto integral fora dessa lista permanecem fora do ranking de brindes.",
-      "Recompra e pedidos multiproduto calculados na aba recompra_calc da copia de trabalho, usando apenas itens pagos no periodo.",
+      "Clientes que compraram mais de uma vez na Black e pedidos multiproduto calculados na aba recompra_calc da copia de trabalho, usando apenas itens pagos no periodo.",
       "Heat map recalculado na aba heatmap_calc e exportado em heatmap_day_hour_values: semana fixa de novembro, dia do mes e hora local Sao Paulo.",
       "Escopo principal ajustado pelo usuario: analisar somente Tenis, Mochilas e Brindes oficiais; demais linhas pagas ficam fora da analise principal.",
       "Top produto por faixa e detalhamento de cores por linha calculados na aba codex_dashboard_calc da copia de trabalho."
@@ -357,6 +357,7 @@
       "multiProductUnits": 9834,
       "multiProductRevenue": 2827893.3199999975,
       "multiProductRevenueShare": 0.50942259927531,
+      "avgProductsPerPaidOrder": 1.5556938394523958,
       "avgUnitsPerMultiProductOrder": 2.74462740720067,
       "paidCustomers": 10383,
       "repeatCustomers": 743,
@@ -15149,5 +15150,79 @@
       "units": 68,
       "revenue": 20688.14
     }
-  ]
+  ],
+  "recurrenceExpanded": {
+    "basis": "Comparacao agregada por customer_sk e pedidos unicos. Antes/depois vem das planilhas fornecidas em 2026-08-14; Black usa recompra_calc/local snapshot. Nao prova coorte cashback sem cruzar os customer_sk da Black contra o periodo pos-Black.",
+    "cohortStatus": "coorte_exata_pendente",
+    "cohortLimitation": "O cruzamento exato dos 86% de novos clientes exige uma base unificada ou autorizacao manual de IMPORTRANGE; o teste em copia auxiliar retornou #REF! pedindo conexao no navegador.",
+    "sourceSheets": {
+      "before": "https://docs.google.com/spreadsheets/d/131VtNxUdUT5xNDGFz9NJob4KuUu939vXIrRdY45jo1I/edit?gid=288247892#gid=288247892",
+      "after": "https://docs.google.com/spreadsheets/d/1gIUCPbFc5h3Uu0vYttQv5Xr39sxOatQQkn4gG6PjKBA/edit?gid=890569835#gid=890569835"
+    },
+    "periods": [
+      {
+        "key": "before_3m",
+        "label": "3 meses antes",
+        "start": "2025-08-01",
+        "end": "2025-10-31",
+        "orders": 11640,
+        "customers": 10404,
+        "repeatCustomers": 997,
+        "repeatCustomerRate": 0.09582852748942715,
+        "repeatOrders": 2233,
+        "repeatOrderShare": 0.1918384879725086,
+        "avgOrdersPerCustomer": 1.118800461361015,
+        "avgProductsPerOrder": 1.8369415807560137,
+        "singleOrderCustomers": 9407,
+        "singleOrderCustomerRate": 0.9041714725105728,
+        "multiProductOrders": 3875,
+        "multiProductOrderRate": 0.3329037800687285,
+        "sourceRows": 20968
+      },
+      {
+        "key": "black",
+        "label": "Black 2025",
+        "start": "2025-11-01",
+        "end": "2025-11-30",
+        "orders": 11249,
+        "customers": 10383,
+        "repeatCustomers": 743,
+        "repeatCustomerRate": 0.07155927959164018,
+        "repeatOrders": 1610,
+        "repeatOrderShare": 0.1431238332296204,
+        "avgOrdersPerCustomer": 1.0834055667918705,
+        "avgProductsPerOrder": 1.5556938394523958,
+        "singleOrderCustomers": 9640,
+        "singleOrderCustomerRate": 0.9284407204083598,
+        "multiProductOrders": 3583,
+        "multiProductOrderRate": 0.3185172015290248,
+        "avgProductsPerMultiProductOrder": 2.74462740720067,
+        "sourceRows": 18413
+      },
+      {
+        "key": "after_3m",
+        "label": "3 meses depois",
+        "start": "2025-12-01",
+        "end": "2026-02-28",
+        "orders": 9841,
+        "customers": 8911,
+        "repeatCustomers": 801,
+        "repeatCustomerRate": 0.0898889013578723,
+        "repeatOrders": 1731,
+        "repeatOrderShare": 0.17589675845950614,
+        "avgOrdersPerCustomer": 1.1043653910896645,
+        "avgProductsPerOrder": 1.8666802154252617,
+        "singleOrderCustomers": 8110,
+        "singleOrderCustomerRate": 0.9101110986421277,
+        "multiProductOrders": 3930,
+        "multiProductOrderRate": 0.3993496595874403,
+        "sourceRows": 17318
+      }
+    ],
+    "insights": [
+      "A Black concentrou aquisicao e compra unica: clientes com 2+ pedidos cairam para 7,2%, abaixo dos 9,6% pre e 9,0% pos.",
+      "No pos-Black, a recorrencia agregada volta para 9,0%, mas isso nao comprova que os novos da Black retornaram; precisa de coorte por customer_sk.",
+      "Carrinho medio geral da Black foi 1,56 item por pedido; os 2,74 itens por pedido sao apenas pedidos com 2+ itens."
+    ]
+  }
 }
